@@ -18,8 +18,36 @@
     display: flex;
     
 }
+/* ---------------------------------------------- */
+
 .sidebar{
-    width:10%;
+    width:0%;
     height:100%;
     background-color: blueviolet;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sidebar .close{
+    position: absolute;
+    right:0;
+    top:0;
+}
+.sidebar .open{
+    width:30px;
+    height:30px;
+    position: absolute;
+    right:-30px;
+    top:0;
+}
+
+.sidebar .links{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: antiquewhite;
+    width: 80%;
+    height: 95%;
 }

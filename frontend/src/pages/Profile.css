@@ -1,5 +1,115 @@
 .profile-main{
-    width:90%;
-    height:90%;
+    width:100%;
+    height:100%;
     background-color: thistle;
+}
+.profile-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-picture {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+    background-color: #eee;
+}
+
+.profile-info h1 {
+    margin: 0;
+    font-size: 22px;
+    color: #444;
+}
+
+.profile-info p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.profile-info a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.profile-info a:hover {
+    text-decoration: underline;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.card h2 {
+    font-size: 18px;
+    color: #444;
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.financial-overview ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.financial-overview li {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #555;
+}
+
+.transaction-history table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.transaction-history th, .transaction-history td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.transaction-history th {
+    background-color: #f4f4f9;
+    font-weight: bold;
+    color: #555;
+}
+
+.transaction-history tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.transaction-history tr:hover {
+    background-color: #f1f4f9;
+}
+
+.security-settings .link {
+    color: #007BFF;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.security-settings .link:hover {
+    text-decoration: underline;
 }

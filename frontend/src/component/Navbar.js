@@ -1,16 +1,17 @@
 import React from 'react'
 import './Components.css'
 import logo from '../pics/x.jpg'
+import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
+  const navigate=useNavigate()
   return (
     <div className="navbar">
-      <img src={logo} alt="" />
+      <div className="" style={{display:"flex",alignItems:"center"}}>
+        <img src={logo} onClick={()=>{navigate('/')}} alt="" />
+        <h2>EventMAnaagementApp</h2>
+      </div>
       <div className="links">
-        <a href="/">HOME</a>
-        <a href="/event">EVENT</a>
-        <a href="/profile">PROFILE</a>
-        <a href="/login">login</a>
-        <a href="/signup">signup</a>
+        <img src={logo} onClick={()=>{navigate('/profile')}} alt="" />
       </div>
     </div>
   )
