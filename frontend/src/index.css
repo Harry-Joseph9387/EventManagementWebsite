@@ -1,0 +1,21 @@
+*{
+    padding:0;
+    margin:0;
+}
+.main{
+    background-color: brown;
+    width:100vw;
+    height:100vh;
+    display: flex;
+}
+.not-sidebar{
+    width: 100%;
+    height:100%;
+}
+.main-content{
+    background-color: chocolate;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
