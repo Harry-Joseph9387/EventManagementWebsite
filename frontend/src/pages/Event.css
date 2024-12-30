@@ -2,4 +2,107 @@
     width: 90%;
     height:90%;
     background-color: cornflowerblue;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    gap:40px;
+}
+.eventBackgroundImg{
+    width: 100%;
+    height:200px;   
+}
+.event-content{
+    background-color: blueviolet;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    gap:20px;
+    padding: 20px;
+}
+
+.interaction{
+    display: flex;
+    gap:20px;
+}
+.event-main button{
+    padding:5px 10px;
+    border-radius:10px;
+}
+
+.commentBox-background{
+    background-color:rgba(0, 0, 0, 0.696);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.commentBox{
+    background-color:rgb(55, 55, 55);
+    color: white;
+    width: 80%;
+    height:80%;
+    position: relative;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    border-radius: 20px;
+    padding:20px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+.close{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top:0;
+    right: 0;
+    z-index: 10;
+}
+
+.commentBox .content{
+    margin-top: 20px;
+    border: 2px solid white;
+    height: 60%;
+    width: 80%;
+    border-radius: 20px;
+    padding:20px;
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    overflow-y: auto;
+}
+
+.comment{
+    border:1px solid white;
+    padding:10px;
+    border-radius: 20px;
+    display: flex;
+    gap:20px;
+    align-items: center;
+}
+
+.userDp{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.comment-input{
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap:20px;
+    width: 100%;
+}
+.comment-input input{
+    width: 50%;
+    border-radius:20px; 
+    padding:0px 20px;
 }
