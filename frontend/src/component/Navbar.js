@@ -3,7 +3,7 @@ import './Components.css'
 import logo from '../pics/logo.jpg'
 import userdp from '../pics/x.jpg'
 import { useNavigate } from 'react-router-dom'
-const Navbar = () => {
+const Navbar = ({loggedIn}) => {
   const navigate=useNavigate()
   return (
     <div className="navbar">
@@ -12,7 +12,15 @@ const Navbar = () => {
         <h2>EventMAnaagementApp</h2>
       </div>
       <div className="links">
-        <img src={userdp} onClick={()=>{navigate('/profile')}} alt="" />
+        {loggedIn && 
+          <img src={userdp} onClick={()=>{navigate('/profile')}} alt="" />        
+        }
+        {!loggedIn &&
+          <div className="navbar-links">
+            <a href="/login">login</a>
+            <a href="/signup">signup</a>
+          </div>
+        }
       </div>
     </div>
   )

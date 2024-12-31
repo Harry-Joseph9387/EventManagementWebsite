@@ -1,7 +1,7 @@
 .navbar{
     width:100%;
     height:10%;
-    background-color: #00ffff;
+    background-color:rgb(35, 175, 175);
     display: flex;
     justify-content: space-around;
     gap:150px;
@@ -18,6 +18,12 @@
     display: flex;
     
 }
+.navbar-links{
+    display: flex;
+    gap:20px;
+}
+
+
 /* ---------------------------------------------- */
 
 .sidebar{

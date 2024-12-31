@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Home.css';
 import {useState} from "react"
 // Importing images
@@ -15,7 +15,6 @@ const Home = ({event,usr,setEvent}) => {
       const time=document.querySelector('.time');
       const newEvent={organiser:usr.username,about:about.value,title:eventname.value,location:location.value,time:time.value,image:"",comments:[]}
       setEvent(prevEvents=>[...prevEvents,newEvent])
-      // console.log(newEvent,eventname.values,location,about,time)
   }
   return (
     <div className="home-main">
