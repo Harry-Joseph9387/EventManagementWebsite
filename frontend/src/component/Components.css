@@ -28,6 +28,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index:0;
 }
 .sidebar .close{
     position: absolute;
@@ -40,6 +41,11 @@
     position: absolute;
     right:-30px;
     top:0;
+}
+@media(min-width:900px){
+    .sidebar .open{
+        display: none;
+    }
 }
 
 .sidebar .links{

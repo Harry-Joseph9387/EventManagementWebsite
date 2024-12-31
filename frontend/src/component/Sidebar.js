@@ -17,6 +17,7 @@ const Sidebar = () => {
   }
   return (
     <div className="sidebar">
+      
       {sidebarOpen===-1?<img src={close} className='close' onClick={()=>{toggleSidebar()}} alt="" />:<img src={close} onClick={()=>{toggleSidebar()}} className='open' alt="" />}
       <div className="links">
         <a href="/login">login</a>

@@ -1,6 +1,7 @@
 import React from 'react'
 import './Components.css'
-import logo from '../pics/x.jpg'
+import logo from '../pics/logo.jpg'
+import userdp from '../pics/x.jpg'
 import { useNavigate } from 'react-router-dom'
 const Navbar = () => {
   const navigate=useNavigate()
@@ -11,7 +12,7 @@ const Navbar = () => {
         <h2>EventMAnaagementApp</h2>
       </div>
       <div className="links">
-        <img src={logo} onClick={()=>{navigate('/profile')}} alt="" />
+        <img src={userdp} onClick={()=>{navigate('/profile')}} alt="" />
       </div>
     </div>
   )
