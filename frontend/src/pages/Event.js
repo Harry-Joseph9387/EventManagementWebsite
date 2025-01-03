@@ -5,29 +5,29 @@ import { useNavigate } from 'react-router-dom';
 import close from "../pics/close.png";
 import { useLocation } from 'react-router-dom';
 
-const Event = ({ loggedIn, usr, setUsr, event }) => {
+const Event = ({ loggedIn, usr, setUsr, allevent }) => {
+ 
   const location = useLocation();
   const getQueryParam = (param) => {
     const queryParams = new URLSearchParams(location.search);
     return queryParams.get(param);
   };
-
   const eventname = getQueryParam('eventname');
+  
+  
   const navigate = useNavigate();
 
-  const [currentEvent, setCurrentEvent] = useState(() => 
-    event.find(x => x.title.replace(/\s+/g, '') === eventname)
-  );
+  let currentEvent=allevent.find(x=>x.title.replace(/\s+/g,'')===eventname)
 
-  useEffect(() => {
-    const e = event.find(x => x.title.replace(/\s+/g, '') === eventname);
-    setCurrentEvent(e);
-    console.log(event,currentEvent)
-  }, [event, eventname]);
-  console.log(event,currentEvent)
+
+
+  // const [currentEvent, setCurrentEvent] = useState(x)
+  // console.log(currentEvent,x)
+
   const [commenting, setCommenting] = useState(false);
   const [comments, setComments] = useState(currentEvent ? currentEvent.comments : []);
 
+  console.log(usr)
   // Handle adding a comment
   const addComment = () => {
     if (!loggedIn) {
@@ -87,7 +87,7 @@ const Event = ({ loggedIn, usr, setUsr, event }) => {
         <div className="event-content">
           <h2>{currentEvent.title}</h2>
           <h4>
-            Organized by: <span>{currentEvent.organiser}</span>
+            Organized by: <span>{currentEvent.organizer}</span>
           </h4>
           <h4>
             BIO: <span>{currentEvent.about}</span>
@@ -131,7 +131,7 @@ const Event = ({ loggedIn, usr, setUsr, event }) => {
           </div>
         )}
       </div>
-      }
+}
     </div>
   );
 };

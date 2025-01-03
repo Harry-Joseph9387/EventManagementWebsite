@@ -23,6 +23,15 @@
     gap:20px;
 }
 
+.navbar-profile{
+    display: flex;
+    align-items: center;
+    gap:20px;
+}
+.navbar-profile button{
+    padding:0px 10px;
+    border-radius: 10px;
+}
 
 /* ---------------------------------------------- */
 

@@ -5,17 +5,61 @@ import {useState} from "react"
 import eventImage from '../pics/event.jpg';
 import x from '../pics/back.jpg'
 import close from '../pics/close.png'
+import {useNavigate} from 'react-router-dom'
 
-const Home = ({event,usr,setEvent}) => {
+const Home = ({event,usr,setEvent,token,loggedIn,fetchEvents}) => {
+  const navigate=useNavigate()
+
   const [toggleCreateEvent,setToggleCreateEvent]=useState(-1)
-  const updateEvents=()=>{
+  
+
+  const addevent=async()=>{
+    if(loggedIn){
       const eventname=document.querySelector('.eventname');
       const location=document.querySelector('.location');
       const about=document.querySelector('.about');
       const time=document.querySelector('.time');
-      const newEvent={organiser:usr.username,about:about.value,title:eventname.value,location:location.value,time:time.value,image:"",comments:[]}
-      setEvent(prevEvents=>[...prevEvents,newEvent])
-  }
+      const newEvent={organizer:usr.username,about:about.value,title:eventname.value,location:location.value,time:time.value,image:"",comments:[]}
+      
+      console.log(newEvent)
+      const response=await fetch('http://localhost:3000/checkevent',{
+          method:"POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newEvent),
+        })
+      
+      
+      const data1=await response.json()
+
+
+      if(response.ok){
+        const response=await fetch('http://localhost:3000/addevent',{
+            method:"POST",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newEvent),
+          })
+        const data2=await response.json()
+        console.log(data2)
+        fetchEvents();
+        }
+      else{
+          console.log("already exirst")
+        }
+
+        
+        alert(Object.values(data1))
+      }
+    else{
+      navigate('/login')
+    }
+    }
+
+    
+
   return (
     <div className="home-main">
       <div style={{ position: 'relative', textAlign: 'center' }}>
@@ -66,22 +110,22 @@ const Home = ({event,usr,setEvent}) => {
           <div className="createEventBox">
             <div className="eventInput">
               <span>event name</span>
-              <input className='eventname' type="text" />
+              <input value='y' className='eventname' type="text" />
             </div>
             <div className="eventInput">
               <span>time</span>
-              <input className='time' type="text" />
+              <input value='y' className='time' type="text" />
             </div>
             <div className="eventInput">
               <span>location</span>
-              <input className='location' type="text" />
+              <input value='y' className='location' type="text" />
             </div>
             <div className="eventInput">
               <span>about</span>
-              <textarea className='about' type="text" />
+              <textarea value='y' className='about' type="text" />
             </div>
             <div className="eventInputSubmit">
-              <button className=''onClick={()=>{updateEvents();setToggleCreateEvent(toggleCreateEvent*-1)}}>Submit</button>
+              <button className=''onClick={()=>{addevent();setToggleCreateEvent(toggleCreateEvent*-1)}}>Submit</button>
             </div>
           </div>
         </div>
