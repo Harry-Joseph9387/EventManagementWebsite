@@ -18,6 +18,9 @@ const userSchema = new Schema({
   contactNo: {
     type: String,
     required: true,
+  },
+  admin:{
+    type:String,
   }
 } ); 
 

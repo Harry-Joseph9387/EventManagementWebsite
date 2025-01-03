@@ -15,8 +15,8 @@ const App = () => {
   
   const [token,setToken]=useState()
   const [eventId,setEventid]=useState('')
-  const [loggedIn,setLoggedIn]=useState(false)
-  const [isAdmin,setIsAdmin]=useState(false)
+  const [loggedIn,setLoggedIn]=useState()
+  const [isAdmin,setIsAdmin]=useState()
   const [usr,setUsr]=useState()
   const [event,setEvent]=useState([])
 
@@ -45,10 +45,12 @@ const App = () => {
 
   useEffect(()=>{
     const tkn=localStorage.getItem('token')
+    const admin=localStorage.getItem('admin')
     if(token || tkn){
       const username=localStorage.getItem('username')
       setLoggedIn(true)
       setUsr({username:username,dp:'',liked:[],registered:[]})
+      setIsAdmin(admin)
     }
     else{
       setLoggedIn(false)
@@ -74,21 +76,21 @@ const App = () => {
   useEffect(()=>{
     console.log(usr)
     console.log(event)
-    // setEvent(event)
-  },[event])
+    console.log(isAdmin)
+  },[event,isAdmin])
   return (
     <div className='main'>
         <div className="not-sidebar">
-          <Navbar loggedIn={loggedIn} setToken={setToken}/>
+          <Navbar loggedIn={loggedIn} setToken={setToken}setIsAdmin={setIsAdmin}/>
           <div className="main-content">
             <Routes>
               <Route path='/event' element={<Event loggedIn={loggedIn} usr={usr} setUsr={setUsr} allevent={event}/>}/>
-              {isAdmin?
+              {isAdmin==='true' ?
               <Route path='/' element={<Admin/>}/>
               :
               <Route path='/' element={<Home event={event} fetchEvents={fetchEvents} setEvent={setEvent} usr={usr} token={token} loggedIn={loggedIn}/>}/>}
               
-              <Route path='/login' element={<Login setToken={setToken} setUsr={setUsr}/>}/>
+              <Route path='/login' element={<Login setIsAdmin={setIsAdmin} setToken={setToken} setUsr={setUsr}/>}/>
               <Route path='/signup' element={<Signup/>}/>
               <Route path='/profile' element={<Profile/>}/>
             </Routes>

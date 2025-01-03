@@ -33,7 +33,7 @@ app.post('/login',async(req,res)=>{
   }
     const token = jwt.sign({username: user.username },process.env.JWT_SECRET,{ expiresIn: '1h' }
       );
-    res.status(200).json({ token });
+    res.status(200).json({ token,admin:user.admin });
 })
 
 app.post('/signup', async (req, res) => {
@@ -45,7 +45,7 @@ app.post('/signup', async (req, res) => {
         return res.status(400).json({ message: 'Username or Email already exist' });
       }
   
-      const newUser = new User({ username, email, password,contactNo });
+      const newUser = new User({ username, email, password,contactNo,admin:'false' });
       const newUserActivity= new UserActivity({username,likedevents:[],registeredevents:[]})
       await newUserActivity.save();
       await newUser.save();

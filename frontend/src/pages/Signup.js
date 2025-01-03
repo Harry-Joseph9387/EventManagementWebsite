@@ -22,6 +22,7 @@ const Signup = () => {
                 const data=await response.json()
                 alert(Object.values(data))
                 if(response.ok){
+                    
                     navigate('/login')
                 }
                 
