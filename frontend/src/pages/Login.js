@@ -1,64 +1,75 @@
-import React from 'react'
-import './Login.css'
-import {useNavigate} from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './LoginForm.module.css';  // Assuming you want to use your friend's styling
+import { Link } from 'react-router-dom';
 
-const Login = ({setToken,setUsr,setIsAdmin}) => {
-  const navigate=useNavigate()
-  const loginFunct=async()=>{
-    const inputs=document.querySelectorAll('input')
-    const username=inputs[0].value
-    const password=inputs[1].value
-    try{
-      const response = await fetch('http://localhost:3000/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-      
-      const data = await response.json();
-      if(response.ok){
-        alert("logged in")
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('admin', data.admin);
+const Login = ({ setLoggedIn }) => {
+    const navigate = useNavigate();
 
-        setToken(data.token)
-        setIsAdmin(data.admin)
-        console.log(data.admin)
-        localStorage.setItem('username', username);
-        navigate('/')
-      }
-      else{
-        alert(Object.values(data))
-      }
-    }
-    catch(err){
-      alert(err)
-    }
-  }
-  return (
-    <div className="login-main">
-      <div className="box">
-        <h1>Login</h1>
-        <div className="input-box">
-            <input   type="text" placeholder="Username" />
-            <i className="bx bxs-user"></i>
-        </div>
-        <div className="input-box">
-            <input  type="password" placeholder="Password" />
-            <i className="bx bxs-lock-alt"></i>
-        </div>
-        
-        <div>
-            <button className="btn" onClick={()=>{loginFunct()}} type='Submit'>Login</button>
-        </div>
-        <div className="reg">
-            <p>Don't have an account?<a href="#"> Register</a></p>
-        </div>
-      </div>
-    </div>
-  )
-}
+    const loginFunct = async () => {
+        const inputs = document.querySelectorAll('input');
+        const username = inputs[0].value;
+        const password = inputs[1].value;
 
-export default Login
+        try {
+            const response = await fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Logged in');
+                localStorage.setItem('loggedIn', true);
+                localStorage.setItem('username', username);
+                localStorage.setItem('admin', data.admin);
+                setLoggedIn(true)
+                navigate('/');
+            } else {
+                alert(Object.values(data));
+            }
+        } catch (err) {
+            alert(err);
+        }
+    };
+
+    return (
+        <div className={styles.loginmain}>
+            <div className={styles.box}>
+                <h1>Login</h1>
+
+                <div className={styles.inputbox}>
+                    <input value='harry1' type="text" placeholder="Username" />
+                    <i className="bx bxs-user"></i>
+                </div>
+
+                <div className={styles.inputbox}>
+                    <input value='harry1' type="password" placeholder="Password" />
+                    <i className="bx bxs-lock-alt"></i>
+                </div>
+
+                <div className={styles.checkforgot}>
+                    <label>
+                        <input type="checkbox" /> Remember me
+                    </label>
+                    <Link to="/forgot">Forgot password?</Link>
+                </div>
+
+                <div>
+                    <button className={styles.btnn} onClick={loginFunct}>
+                        Login
+                    </button>
+                </div>
+
+                <div className={styles.reg}>
+                    <p>Don't have an account?<Link to="/signup"> Register</Link></p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Login;

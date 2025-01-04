@@ -7,11 +7,7 @@ const Events=require('./models/Events')
 const jwt = require('jsonwebtoken');
 const UserActivity=require('./models/UserActivity')
 const app = express();
-app.use(cors({
-  origin:[""],
-  methods:["POST","GET"],
-  credentials:true
-}));
+app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -62,12 +58,13 @@ app.post('/signup', async (req, res) => {
   });
 
 app.post('/useractivity',async(req,res)=>{
-  const {username}=req.body;
-  const x = await UserActivity.findOne({ username });
-  if(!x){console.log("no useractivity")}
-  const x1=x.likedevents
-  const x2=x.registeredevents
-  return res.status(200).json({username,x1,x2})
+  const {username_useractivity}=req.body;
+
+  const x = await UserActivity.findOne({username:username_useractivity});
+  
+  if(!x){console.log("no useractivity");return res.status(404).json({message:"no useractivity"})}
+  
+  return res.status(200).json(x)
 })
 
 app.get('/userevents',async(req,res)=>{
@@ -93,6 +90,8 @@ app.post('/checkevent',async(req,res)=>{
 }catch(err){
   console.log(err)
 }})
+
+
 app.post('/addevent',async(req,res)=>{
   try{
     const event=req.body
@@ -101,6 +100,39 @@ app.post('/addevent',async(req,res)=>{
     const addingEvent=new Events({organizer,about,title,location,time,comments,image})
     await addingEvent.save()
     res.status(201).json({message:"event created"}); 
+  }
+  catch(err){
+    console.log(err)
+  }})
+  
+app.put('/addcomment',async(req,res)=>{
+    try{
+      const {comment,currentEventTitle}=req.body
+      // console.log(comment,currentEventTitle)
+      const event= await Events.findOne({title:currentEventTitle})
+      console.log(event.comments)
+
+        event.comments=[...event.comments,comment]
+        await event.save()
+        return res.status(200).json({message:"comment added"})
+      
+    }
+    catch(err){
+      console.log(err)
+    } 
+  })
+
+
+app.post('/addlikedregistered',async(req,res)=>{
+  try{
+    const temporaryUsr=req.body
+    const username=temporaryUsr.username
+    const useractivity=await UserActivity.findOneAndReplace({username:username},temporaryUsr,{new:true})
+    if (!useractivity) {
+      return res.status(404).json({ message: "no useractivity" });
+    }
+    console.log(useractivity)
+    res.status(200).json({message:'updatedUser'});  // Send the updated user as the response
   }
   catch(err){
     console.log(err)

@@ -13,8 +13,7 @@ import Admin from './pages/Admin'
 import './index.css'
 const App = () => {
   
-  const [token,setToken]=useState()
-  const [eventId,setEventid]=useState('')
+  const [username,setUsername]=useState()
   const [loggedIn,setLoggedIn]=useState()
   const [isAdmin,setIsAdmin]=useState()
   const [usr,setUsr]=useState()
@@ -42,21 +41,41 @@ const App = () => {
   //     ,{organiser:"",about:"Throw the ultimate party with our event management expertise! From vibrant themes and decor to exciting activities and music, we ensure your celebration is a hit. Let’s make your party unforgettable!",title:"Party Event",location:"",time:"",image:"../pics/wed/party.jpg",comments:[]}
   // ])
 
+  //on reloading, user logs out as the loggedin goes null
+  //saving loggedIn,isAdmin,username  on local storage
+  //setting all in home as on jumping from login to home, useEffect gets executed without user actually reloading the site
+ 
+
+  // useEffect(()=>{
+  //   console.log('usr update prompt is out')
+  // },[usr]) //this is for live updating liked/registerd events to usr when moved out from events page
+
+  const fetchUsr=async()=>{
+    const username_useractivity=username;
+    console.log(username_useractivity)
+
+    
+    const response=await fetch('http://localhost:3000/useractivity',{
+      method:"POST",
+      headers:{'Content-Type': 'application/json'},
+      body:JSON.stringify({username_useractivity})
+    })
+    const data=await response.json()
+    
+      setUsr(data)//doing this as moving to other pages,fetchusr is initiated
+      const currentTime = new Date();
+      // console.log(currentTime.toLocaleTimeString(),"usr updated")
+    
+  }
+
 
   useEffect(()=>{
-    const tkn=localStorage.getItem('token')
-    const admin=localStorage.getItem('admin')
-    if(token || tkn){
-      const username=localStorage.getItem('username')
-      setLoggedIn(true)
-      setUsr({username:username,dp:'',liked:[],registered:[]})
-      setIsAdmin(admin)
+    if(username){
+      fetchUsr();
     }
-    else{
-      setLoggedIn(false)
-    }
-  },[token])
+  },[username])
 
+  //declaring fetchEvents outside for to call again after event creation
   const fetchEvents=async()=>{      
     const response=await fetch('http://localhost:3000/userevents',{
       method:"GET",
@@ -73,24 +92,37 @@ const App = () => {
   
 },[])
 
+useEffect(()=>{
+  const currentTime = new Date();
+  const username = localStorage.getItem('username') ; 
+  const isAdmin = localStorage.getItem('isAdmin') ;
+  const loggedIn = localStorage.getItem('loggedIn') ;
+
+  setUsername(username)
+  setLoggedIn(loggedIn)//usrfetch is updated on moving to other pages, maybe because usename is updated inifinite times due to  execution of setLoggedIn() and providing loggedIn in dependency array
+  setIsAdmin(isAdmin)
+  
+  // console.log(loggedIn)
+  // console.log(currentTime.toLocaleTimeString(),'usrname is updated')
+},[])
+
   useEffect(()=>{
     console.log(usr)
-    console.log(event)
-    console.log(isAdmin)
-  },[event,isAdmin])
+
+  },[usr])
   return (
     <div className='main'>
         <div className="not-sidebar">
-          <Navbar loggedIn={loggedIn} setToken={setToken}setIsAdmin={setIsAdmin}/>
+          <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
           <div className="main-content">
             <Routes>
-              <Route path='/event' element={<Event loggedIn={loggedIn} usr={usr} setUsr={setUsr} allevent={event}/>}/>
+              <Route path='/event' element={<Event loggedIn={loggedIn} usr={usr} fetchEvents={fetchEvents}  allevent={event}/>}/>
               {isAdmin==='true' ?
               <Route path='/' element={<Admin/>}/>
               :
-              <Route path='/' element={<Home event={event} fetchEvents={fetchEvents} setEvent={setEvent} usr={usr} token={token} loggedIn={loggedIn}/>}/>}
+              <Route path='/' element={<Home event={event} fetchEvents={fetchEvents} setEvent={setEvent} usr={usr} username={username}  loggedIn={loggedIn}/>}/>}
               
-              <Route path='/login' element={<Login setIsAdmin={setIsAdmin} setToken={setToken} setUsr={setUsr}/>}/>
+              <Route path='/login' element={<Login   setLoggedIn={setLoggedIn}/>}/>
               <Route path='/signup' element={<Signup/>}/>
               <Route path='/profile' element={<Profile/>}/>
             </Routes>

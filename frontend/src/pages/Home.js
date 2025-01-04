@@ -5,22 +5,22 @@ import {useState} from "react"
 import eventImage from '../pics/event.jpg';
 import x from '../pics/back.jpg'
 import close from '../pics/close.png'
+import AddingEvent from '../component/AddingEvent';
 import {useNavigate} from 'react-router-dom'
 
-const Home = ({event,usr,setEvent,token,loggedIn,fetchEvents}) => {
-  const navigate=useNavigate()
-
+const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
+  const navigate=useNavigate()  
   const [toggleCreateEvent,setToggleCreateEvent]=useState(-1)
-  
-
   const addevent=async()=>{
     if(loggedIn){
       const eventname=document.querySelector('.eventname');
       const location=document.querySelector('.location');
       const about=document.querySelector('.about');
       const time=document.querySelector('.time');
-      const newEvent={organizer:usr.username,about:about.value,title:eventname.value,location:location.value,time:time.value,image:"",comments:[]}
+      const image=document.querySelector('.image')
+      const newEvent={organizer:username,about:about.value,title:eventname.value,location:location.value,time:time.value,image:image.value,comments:[]}
       
+    
       console.log(newEvent)
       const response=await fetch('http://localhost:3000/checkevent',{
           method:"POST",
@@ -58,6 +58,7 @@ const Home = ({event,usr,setEvent,token,loggedIn,fetchEvents}) => {
     }
     }
 
+    
     
 
   return (
@@ -105,30 +106,7 @@ const Home = ({event,usr,setEvent,token,loggedIn,fetchEvents}) => {
         <button className='host' onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}}>Host</button>
       </div>
       {toggleCreateEvent===1&&
-        <div className="createEventBody">
-          <img src={close} className='close' onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}} alt="" />
-          <div className="createEventBox">
-            <div className="eventInput">
-              <span>event name</span>
-              <input value='y' className='eventname' type="text" />
-            </div>
-            <div className="eventInput">
-              <span>time</span>
-              <input value='y' className='time' type="text" />
-            </div>
-            <div className="eventInput">
-              <span>location</span>
-              <input value='y' className='location' type="text" />
-            </div>
-            <div className="eventInput">
-              <span>about</span>
-              <textarea value='y' className='about' type="text" />
-            </div>
-            <div className="eventInputSubmit">
-              <button className=''onClick={()=>{addevent();setToggleCreateEvent(toggleCreateEvent*-1)}}>Submit</button>
-            </div>
-          </div>
-        </div>
+        <AddingEvent setToggleCreateEvent={setToggleCreateEvent} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
       }
     </div>
   );
