@@ -8,7 +8,11 @@ const EventsInfo=require('./models/EventsInfo')
 const jwt = require('jsonwebtoken');
 const UserActivity=require('./models/UserActivity')
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin:[""],
+  methods:["POST","GET","PUT"],
+  credentials:true
+}));
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })

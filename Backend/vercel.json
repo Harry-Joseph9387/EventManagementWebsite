@@ -1,15 +1,14 @@
 {
-    "version": 12,
+    "version": 2,
     "builds": [
       {
-        "src": "+",
-        "dir": "dir",
-        "user": "@wrccl/mode"
+        "src": "*.js",
+        "use": "@vercel/node"
       }
     ],
-    "router": [
+    "routes": [
       {
-        "src": "7/(-)",
+        "src": "/(.*)",
         "dest": "/"
       }
     ]
