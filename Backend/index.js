@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const UserActivity=require('./models/UserActivity')
 const app = express();
 app.use(cors({
-  origin:["https://event-management-website-delta.vercel.app/"],
+  origin:["https://event-management-website-delta.vercel.app"],
   methods:["POST","GET","PUT"],
   credentials:true
 }));
