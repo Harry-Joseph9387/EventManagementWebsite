@@ -12,7 +12,7 @@ const Login = ({ setLoggedIn }) => {
         const password = inputs[1].value;
 
         try {
-            const response = await fetch('http://localhost:3000/login', {
+            const response = await fetch('https://event-management-website-api.vercel.app/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -33,7 +33,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
   
   const addLikedRegistered=async()=>{
     const eventname=currentEvent.title
-    const response=await fetch('http://localhost:3000/addlikedregistered',{
+    const response=await fetch('https://event-management-website-api.vercel.app/addlikedregistered',{
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
 
   const sendComment=async(comment)=>{
     const  currentEventTitle=currentEvent.title
-    const response=await fetch('http://localhost:3000/addcomment',{
+    const response=await fetch('https://event-management-website-api.vercel.app/addcomment',{
       method: 'PUT',
       headers: {
           'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
   
   const fetchEventsInfo=async ()=>{
     const eventname=currentEvent.title
-    const response=await fetch('http://localhost:3000/eventsinfo',{
+    const response=await fetch('https://event-management-website-api.vercel.app/eventsinfo',{
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',

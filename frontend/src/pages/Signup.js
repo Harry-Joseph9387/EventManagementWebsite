@@ -17,7 +17,7 @@ const Signup = () => {
 
         if (TC.checked) {
             try {
-                const response = await fetch('http://localhost:3000/signup', {
+                const response = await fetch('https://event-management-website-api.vercel.app/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

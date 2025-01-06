@@ -22,7 +22,7 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
       
     
       console.log(newEvent)
-      const response=await fetch('http://localhost:3000/checkevent',{
+      const response=await fetch('https://event-management-website-api.vercel.app/checkevent',{
           method:"POST",
           headers: {
             'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
 
 
       if(response.ok){
-        const response=await fetch('http://localhost:3000/addevent',{
+        const response=await fetch('https://event-management-website-api.vercel.app/addevent',{
             method:"POST",
             headers: {
               'Content-Type': 'application/json',
