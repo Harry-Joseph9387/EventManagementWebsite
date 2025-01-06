@@ -55,7 +55,7 @@ const App = () => {
     console.log(username_useractivity)
 
     
-    const response=await fetch('http://localhost:3000/useractivity',{
+    const response=await fetch('https://event-management-website-api.vercel.app/useractivity',{
       method:"POST",
       headers:{'Content-Type': 'application/json'},
       body:JSON.stringify({username_useractivity})
@@ -77,7 +77,7 @@ const App = () => {
 
   //declaring fetchEvents outside for to call again after event creation
   const fetchEvents=async()=>{      
-    const response=await fetch('http://localhost:3000/userevents',{
+    const response=await fetch('https://event-management-website-api.vercel.app/userevents',{
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
