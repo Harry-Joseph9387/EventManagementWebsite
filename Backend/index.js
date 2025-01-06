@@ -10,7 +10,7 @@ const UserActivity=require('./models/UserActivity')
 const app = express();
 app.use(cors({
   origin:["https://event-management-website-delta.vercel.app"],
-  methods:["POST","GET","PUT"],
+  methods:["POST","GET","PUT","OPTIONS"],
   credentials:true
 }));
 app.use(express.json());
