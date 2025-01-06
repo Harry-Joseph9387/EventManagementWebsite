@@ -19,11 +19,15 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
   .then(() => console.log("Connected to MongoDB"))
   .catch(err => console.error("Failed to connect to MongoDB", err));
 
- 
+
 app.listen(3000, () => {
     console.log(`Server running on port 3000`);
   });
 
+app.get("/",(req,res)=>{
+  res.json("hello")
+}) 
+  
 app.post('/login',async(req,res)=>{
     const { username, password} = req.body;
     console.log(username,password)
