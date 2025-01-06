@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const User=require('./models/User')
 const Events=require('./models/Events')
+const EventsInfo=require('./models/EventsInfo')
 const jwt = require('jsonwebtoken');
 const UserActivity=require('./models/UserActivity')
 const app = express();
@@ -98,6 +99,8 @@ app.post('/addevent',async(req,res)=>{
     const {organizer,about,title,location,time,image,comments}=event
     console.log('addevent',event)
     const addingEvent=new Events({organizer,about,title,location,time,comments,image})
+    const addingEventsInfo=new EventsInfo({eventname:title,likedusers:[],registeredusers:[]})
+    await addingEventsInfo.save()
     await addingEvent.save()
     res.status(201).json({message:"event created"}); 
   }
@@ -125,16 +128,30 @@ app.put('/addcomment',async(req,res)=>{
 
 app.post('/addlikedregistered',async(req,res)=>{
   try{
-    const temporaryUsr=req.body
+    const {temporaryUsr,tempEventsInfo}=req.body
+    // console.log(temporaryUsr,eventname)
     const username=temporaryUsr.username
+    const eventname=tempEventsInfo.eventname
     const useractivity=await UserActivity.findOneAndReplace({username:username},temporaryUsr,{new:true})
+    const eventsinfo=await EventsInfo.findOneAndReplace({eventname:eventname},tempEventsInfo,{new:true})
     if (!useractivity) {
       return res.status(404).json({ message: "no useractivity" });
     }
-    console.log(useractivity)
+    if (!eventsinfo) {
+      return res.status(404).json({ message: "no eventsINfo" });
+    }
+    console.log('/addlikedregistered',tempEventsInfo)
     res.status(200).json({message:'updatedUser'});  // Send the updated user as the response
   }
   catch(err){
     console.log(err)
   }
+})
+
+app.post('/eventsinfo',async(req,res)=>{
+  const {eventname}=req.body;
+  const evnt=await EventsInfo.find({eventname:eventname})
+  const x=evnt[0]
+  console.log('/eventsinfo',x);
+  return res.status(200).json(x)
 })

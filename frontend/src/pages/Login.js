@@ -42,12 +42,12 @@ const Login = ({ setLoggedIn }) => {
                 <h1>Login</h1>
 
                 <div className={styles.inputbox}>
-                    <input value='harry1' type="text" placeholder="Username" />
+                    <input value='harry2' type="text" placeholder="Username" />
                     <i className="bx bxs-user"></i>
                 </div>
 
                 <div className={styles.inputbox}>
-                    <input value='harry1' type="password" placeholder="Password" />
+                    <input value='harry2' type="password" placeholder="Password" />
                     <i className="bx bxs-lock-alt"></i>
                 </div>
 

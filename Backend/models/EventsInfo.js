@@ -13,6 +13,6 @@ const userSchema = new Schema({
   },
 } ); 
 
-const EventInfo = mongoose.model('EventInfo', EventInfoSchema);
+const EventsInfo = mongoose.model('EventsInfo', userSchema);
 
-module.exports = EventInfo;
+module.exports = EventsInfo;

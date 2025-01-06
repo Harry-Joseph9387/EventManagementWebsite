@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
 
+  const [tempEventsInfo,setTempEventsInfo]=useState()
 
   const location = useLocation();
   
@@ -26,19 +27,18 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
   let currentEvent=allevent.find(x=>x.title.replace(/\s+/g,'')===eventname)
 
 
-
-
   const [commenting, setCommenting] = useState(false);
   const [comments,setComments]=useState() 
 
   
   const addLikedRegistered=async()=>{
+    const eventname=currentEvent.title
     const response=await fetch('http://localhost:3000/addlikedregistered',{
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
       },
-      body: JSON.stringify(temporaryUsr),
+      body: JSON.stringify({temporaryUsr,tempEventsInfo}),
     })
     const data=await response.json()
     alert(data,"addlikedregistered is executed")
@@ -102,7 +102,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
       
     }
   };
-
+  
   const liking = () => {
     if (loggedIn) {
       const isLiked = temporaryUsr.likedevents.includes(currentEvent.title);
@@ -111,6 +111,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
         const likedButton=document.querySelector('.like')
         likedButton.innerHTML='Like'
         temporaryUsr.likedevents=temporaryUsr.likedevents.filter(x=>x!==currentEvent.title)
+        tempEventsInfo.likedusers=tempEventsInfo.likedusers.filter(x=>x!==username)
         addLikedRegistered()
         
       } else {
@@ -118,6 +119,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
         const likedButton=document.querySelector('.like')
         likedButton.innerHTML='Liked'
         temporaryUsr.likedevents=[...temporaryUsr.likedevents,currentEvent.title]
+        tempEventsInfo.likedusers=[...tempEventsInfo.likedusers,username]
         addLikedRegistered()
       }
       console.log(temporaryUsr,temporaryUsr.likedevents.includes(currentEvent.title))
@@ -133,11 +135,15 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
         const registeredButton=document.querySelector('.register')
         registeredButton.innerHTML='Register'
         temporaryUsr.registeredevents=temporaryUsr.registeredevents.filter(x=>x!=currentEvent.title)
+        tempEventsInfo.registeredusers=tempEventsInfo.registeredusers.filter(x=>x!==username)
+
         addLikedRegistered()
       } else {
         const registeredButton=document.querySelector('.register')
         registeredButton.innerHTML='Registered'
         temporaryUsr.registeredevents=[...temporaryUsr.registeredevents,currentEvent.title]
+        tempEventsInfo.registeredusers=[...tempEventsInfo.registeredusers,username]
+
         addLikedRegistered()
       }
       console.log(temporaryUsr,temporaryUsr.registeredevents.includes(currentEvent.title))
@@ -147,9 +153,30 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
   };
 
   
+  const fetchEventsInfo=async ()=>{
+    const eventname=currentEvent.title
+    const response=await fetch('http://localhost:3000/eventsinfo',{
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({eventname,tempEventsInfo}),
+    })
+    const data=await response.json()
+    setTempEventsInfo(data);
+  }
 
+  useEffect(()=>{
+    if(currentEvent){
+      fetchEventsInfo()
+    }
+  },[currentEvent])
 
-
+  useEffect(()=>{
+    if(tempEventsInfo){
+      console.log('tempEventsInfo',tempEventsInfo)
+    }
+  },[tempEventsInfo])
 
   return (
     <div className="">

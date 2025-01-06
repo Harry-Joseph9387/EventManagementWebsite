@@ -63,7 +63,7 @@ const App = () => {
     const data=await response.json()
     
       setUsr(data)//doing this as moving to other pages,fetchusr is initiated
-      const currentTime = new Date();
+      // const currentTime = new Date();
       // console.log(currentTime.toLocaleTimeString(),"usr updated")
     
   }
