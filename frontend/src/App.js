@@ -58,7 +58,8 @@ const App = () => {
     const response=await fetch('https://event-management-website-api.vercel.app/useractivity',{
       method:"POST",
       headers:{'Content-Type': 'application/json'},
-      body:JSON.stringify({username_useractivity})
+      body:JSON.stringify({username_useractivity}),
+      credentials: 'include'
     })
     const data=await response.json()
     
@@ -81,7 +82,8 @@ const App = () => {
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
-      }
+      },
+      credentials: 'include'
     })
     const data=await response.json()
     setEvent(data.allevents)

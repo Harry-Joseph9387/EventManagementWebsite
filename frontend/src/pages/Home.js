@@ -28,6 +28,7 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(newEvent),
+          credentials: 'include'
         })
       
       
@@ -41,6 +42,7 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(newEvent),
+            credentials: 'include'
           })
         const data2=await response.json()
         console.log(data2)

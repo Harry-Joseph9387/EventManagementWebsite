@@ -39,6 +39,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({temporaryUsr,tempEventsInfo}),
+      credentials: 'include'
     })
     const data=await response.json()
     alert(data,"addlikedregistered is executed")
@@ -84,6 +85,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({comment,currentEventTitle}),
+      credentials: 'include'
     })
     const data=await response.json()
     
@@ -161,6 +163,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({eventname,tempEventsInfo}),
+      credentials: 'include'
     })
     const data=await response.json()
     setTempEventsInfo(data);
