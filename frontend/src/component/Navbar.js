@@ -3,7 +3,7 @@ import './Components.css'
 import logo from '../pics/logo.jpg'
 import userdp from '../pics/x.jpg'
 import { useNavigate } from 'react-router-dom'
-const Navbar = ({loggedIn,setLoggedIn}) => {
+const Navbar = ({loggedIn,setLoggedIn,usr,setUsr}) => {
   const navigate=useNavigate()
   return (
     <div className="navbar">
@@ -14,8 +14,8 @@ const Navbar = ({loggedIn,setLoggedIn}) => {
       <div className="links">
         {loggedIn && 
           <div className="navbar-profile">
-            <img src={userdp} onClick={()=>{navigate('/profile')}} alt="" />        
-            <button onClick={()=>{localStorage.setItem('loggedIn','');setLoggedIn(false)}}>logout</button>
+            <img src={(usr&&usr.image)?usr.image:userdp} onClick={()=>{navigate('/profile')}} alt="" />        
+            <button onClick={()=>{localStorage.setItem('loggedIn','');setLoggedIn(false);setUsr({});localStorage.setItem("username","")}}>logout</button>
           </div>
         }
         {!loggedIn &&

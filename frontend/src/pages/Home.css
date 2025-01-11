@@ -216,7 +216,7 @@
 .eventInput input{
   padding:5px 20px;
   border-radius: 10px;
-}
+} webkit
 .eventInput .about{
   height:100px;
   padding:20px 20px;

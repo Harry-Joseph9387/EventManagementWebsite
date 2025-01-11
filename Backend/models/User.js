@@ -21,6 +21,15 @@ const userSchema = new Schema({
   },
   admin:{
     type:String,
+  },
+  bio:{
+    type:String,
+  },
+  location:{
+    type:String,
+  },
+  image:{
+    type:String
   }
 } ); 
 

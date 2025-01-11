@@ -10,6 +10,9 @@ const userSchema = new Schema({
   },
   registeredevents:{
     type:Array,
+  },
+  organizedevents:{
+    type:Array,
   }
 } ); 
 

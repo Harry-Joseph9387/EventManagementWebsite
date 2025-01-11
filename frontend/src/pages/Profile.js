@@ -1,60 +1,189 @@
 import React from 'react'
 import './Profile.css'
-const Profile = () => {
+import {useState,useEffect} from 'react'
+import userdp from '../pics/x.jpg'
+import close from "../pics/close.png"
+const Profile = ({usr,setUsr}) => {
+
+    const [userDetails,setUserDetails]=useState()
+    const [organizedEvents,setOrganizedEvents]=useState()
+    const [eventName,setEventName]=useState()
+      const handleEdit = () => {
+        const newName = prompt("Enter new name:", userDetails.username);
+        const newEmail = prompt("Enter new email:", userDetails.email);
+        const newPhone = prompt("Enter new phone:", userDetails.contactNo);
+        const newBio = prompt("Enter new bio:", userDetails.bio);
+        const newLocation = prompt("Enter new location:", userDetails.location);
+    
+        setUserDetails({
+          ...userDetails,
+          username:newName|| userDetails.username,
+          email: newEmail || userDetails.email,
+          contactNo: newPhone || userDetails.contactNo,
+          bio: newBio || userDetails.bio,
+          location: newLocation || userDetails.location,
+        });
+
+      };
+    
+      const handleProfilePictureChange = () => {
+        const newPicture = prompt("Enter new profile picture URL:",userDetails.image);
+        setUserDetails({...userDetails,image: newPicture || userDetails.image});
+        setUsr({...usr,"image":newPicture})
+      };
+      const fetchUser=async()=>{
+        const username_fetchuser=localStorage.getItem('username')
+        // const username_fetchuser="harry1"
+        const response=await fetch(`${process.env.REACT_APP_BASE_URL}/userinfo`,{
+            method:"POST",
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify({username_fetchuser}),
+            credentials: 'include'
+          })
+          const data=await response.json()
+          setUserDetails(data)
+      }
+      const updateUser=async()=>{
+        const oldusername=localStorage.getItem('username')
+        // const oldusername="x"
+
+        
+        const response=await fetch(`${process.env.REACT_APP_BASE_URL}/updateuserinfo`,{
+            method:"POST",
+            headers:{'Content-Type': 'application/json'},
+            body:JSON.stringify({userDetails,oldusername}),
+            credentials: 'include'
+          })
+          const data=await response.json()
+          localStorage.setItem("username",userDetails.username) //on reloading, it sends new username to fetch the user
+      }
+      useEffect(()=>{
+        fetchUser()
+        fetchOrganizedEvents()
+      },[])
+      useEffect(()=>{
+        if(userDetails){
+            updateUser()
+        }
+      },[userDetails])
+
+      const fetchOrganizedEvents=async()=>{
+        const username=localStorage.getItem("username")
+        const response=await fetch(`${process.env.REACT_APP_BASE_URL}/organizedevents`,{
+          method:"POST",
+          headers:{'Content-Type': 'application/json'},
+          body:JSON.stringify({username}),
+          credentials: 'include'
+        })
+        const data=await response.json()
+        setOrganizedEvents(data)
+      }
+      useEffect(()=>{
+        console.log(organizedEvents)
+      },[fetchOrganizedEvents])
+
+      useEffect(()=>{
+        if(organizedEvents){
+        console.log(organizedEvents[organizedEvents.indexOf(eventName)])
+        console.log(eventName)
+        }
+      },[eventName,organizedEvents])
+      const removeUser = async (user) => {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_BASE_URL}/removeregistereduser`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              eventName: eventName.title,
+              user: user,
+            }),
+          });
+          alert(response.ok)
+          if (response.ok) {
+            const updatedEvents = [...organizedEvents];
+            const eventIndex = organizedEvents.indexOf(eventName);
+            updatedEvents[eventIndex].registeredusers = updatedEvents[
+              eventIndex
+            ].registeredusers.filter((u) => u !== user);
+      
+            setOrganizedEvents(updatedEvents);
+            // fetchOrganizedEvents()
+          } else {
+            alert(`Failed to remove ${user}.`);
+          }
+        } catch (error) {
+          console.error("Error removing user:", error);
+          alert("An error occurred. Please try again.");
+        }
+      };
   return (
     <div className="profile-main">
-      <div class="profile-container">
-        <div class="profile-header">
-            <img src="profile.jpg" alt="Profile Picture" class="profile-picture"/>
-            <div class="profile-info">
-                <h1>John Doe</h1>
-                <p>Email: <a href="mailto:john.doe@example.com">john.doe@example.com</a></p>
-                <p>Contact: +1 234 567 890</p>
+      {(userDetails&& usr)&&
+      <div className="profile-container">
+      <div className="profile-card">
+        <img
+          src={userDetails.image?userDetails.image:userdp}
+          alt="Profile"
+          className="profile-image"
+          onClick={handleProfilePictureChange}
+          title="Click to change profile picture"
+        />
+        <h2 className="profile-name">{userDetails.username}</h2>
+        <p className="profile-email">{userDetails.email}</p>
+        <p className="profile-phone">{userDetails.contactNo}</p>
+        <p className="profile-location">Location:{userDetails.location}</p> 
+        <p className="profile-bio">Bio:{userDetails.bio}</p>
+        <button className="edit-profile-button" onClick={handleEdit}>
+          Edit Profile
+        </button>
+        
+      </div>
+      
+      <div className="profile-subheading-div">
+        <h2>Events u organized</h2>
+      </div>
+    
+      {organizedEvents&&
+      <div className="profile-organized-events">
+        {/* <button onClick={()=>{fetchOrganizedEvents()}}>xxx</button>/ */}
+        
+          {organizedEvents.map(event=>{
+            return <div className="profile-each-event">
+              <img className='profile-each-event-image' src={event.image} alt="" />
+              <p className='profile-each-event-title'>{event.title}</p>
+              <div onClick={()=>{setEventName(event)}} className="overlay"></div>
             </div>
+          } )}
+      </div>
+      }
+      {eventName  &&
+        <div className="event-status-container">
+          <img className='close' onClick={()=>{setEventName('')}}  src={close} alt="" />
+          <div className="event-status-box">
+            <h2>Registered User</h2>
+            {organizedEvents[organizedEvents.indexOf(eventName)]&&
+            <div className="event-status-inbox">
+              {organizedEvents[organizedEvents.indexOf(eventName)].registeredusers.map(user=> {
+                return <div className="event-status-user">
+                  <span>{user}</span>
+                  <button
+                    className="remove-button"
+                    onClick={() => removeUser(user)}
+                  >
+                  Remove
+                  </button>
+                      </div>
+              })}
+            </div>
+            }
+          </div>
         </div>
-
-        <div class="card financial-overview">
-            <h2>Financial Overview</h2>
-            <ul>
-                <li><strong>Total Savings:</strong> $10,000</li>
-                <li><strong>Total Expenses:</strong> $2,500</li>
-                <li><strong>Investments:</strong> $5,000</li>
-            </ul>
-        </div>
-
-        <div class="card transaction-history">
-            <h2>Transaction History</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2024-01-01</td>
-                        <td>Grocery Shopping</td>
-                        <td>Expenses</td>
-                        <td>$200</td>
-                    </tr>
-                    <tr>
-                        <td>2024-01-05</td>
-                        <td>Salary</td>
-                        <td>Income</td>
-                        <td>$2,000</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="card security-settings">
-            <h2>Security Settings</h2>
-            <p><a href="#" class="link">Change Password</a> | <a href="#" class="link">Enable Two-Factor Authentication</a></p>
-        </div>
+      }
     </div>
+        
+}
     </div>
   )
 }

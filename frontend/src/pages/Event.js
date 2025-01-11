@@ -33,7 +33,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
   
   const addLikedRegistered=async()=>{
     const eventname=currentEvent.title
-    const response=await fetch('https://event-management-website-api.vercel.app/addlikedregistered',{
+    const response=await fetch(`${process.env.REACT_APP_BASE_URL}/addlikedregistered`,{
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
 
   //live update of button's name
   useEffect(()=>{
-    if(usr&&temporaryUsr){
+    if(usr&&temporaryUsr&&currentEvent){
       const isLiked = temporaryUsr.likedevents.includes(currentEvent.title);
       const isRegistered = temporaryUsr.registeredevents.includes(currentEvent.title);
       if(isLiked){
@@ -75,11 +75,11 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
         registeredButton.innerHTML='Register'
       }
     }
-  },[usr])
+  },[usr,currentEvent])
 
   const sendComment=async(comment)=>{
     const  currentEventTitle=currentEvent.title
-    const response=await fetch('https://event-management-website-api.vercel.app/addcomment',{
+    const response=await fetch(`${process.env.REACT_APP_BASE_URL}/addcomment`,{
       method: 'PUT',
       headers: {
           'Content-Type': 'application/json',
@@ -98,7 +98,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
       navigate('/login');
     } else {
       const commentInput = document.querySelector('.comment-input input');
-      const comment={ username:username, dp:"", comments: commentInput.value }
+      const comment={ username:username, dp:usr.image, comments: commentInput.value }
       sendComment(comment);
       comment.value = '';
       
@@ -157,7 +157,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
   
   const fetchEventsInfo=async ()=>{
     const eventname=currentEvent.title
-    const response=await fetch('https://event-management-website-api.vercel.app/eventsinfo',{
+    const response=await fetch(`${process.env.REACT_APP_BASE_URL}/eventsinfo`,{
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
@@ -182,13 +182,13 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
   },[tempEventsInfo])
 
   return (
-    <div className="">
+    <div className="event-main-no-use-div">
       {currentEvent &&
       <div className="event-main">
         {/* <button className='' onClick={addLikedRegistered}>alskfnas</button> */}
-        {/* <img src={backgroundIMage} className="eventBackgroundImg" alt="" /> */}
+        <img src={currentEvent.image} className="eventBackgroundImg" alt="" />
         <div className="event-content">
-          <h2>{currentEvent.title}</h2>
+          {/* <h2>{currentEvent.title}</h2>
           <h4>
             Organized by: <span>{currentEvent.organizer}</span>
           </h4>
@@ -196,7 +196,24 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
             BIO: <span>{currentEvent.about}</span>
           </h4>
           <h4>Location: {currentEvent.location}</h4>
-          <h4>Time: {currentEvent.time}</h4>
+          <h4>Time: {currentEvent.time}</h4> */}
+          <div className="event-card">
+            <h2 className="event-title">{currentEvent.title} <span className='byline'>organized by:{currentEvent.organizer}</span> </h2>
+           <div className="event-info">
+               <p>
+            {/* <span className="event-label">📅 Date:</span> {currentEvent.date} */}
+               </p>
+               <p>
+                  <span className="event-label">⏰ Time:</span> {currentEvent.time}
+               </p>
+                <p>
+                  <span className="event-label">📍 Location:</span> {currentEvent.location}
+                </p>
+                <p>
+                  <span className="event-label">📝 Description:</span> {currentEvent.about}
+                </p>
+             </div>
+           </div>
           <div className="interaction">
             <button onClick={() => setCommenting(true)}>Comment</button>
             <button className="like" onClick={()=>{liking()}}>
@@ -216,7 +233,11 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
                 {comments.map((x, index) => (
                   <div className="comment" key={index}>
                     <img src={x.dp} className="userDp" alt="" />
-                    <p>{x.comments}</p>
+                    <div className="comment-display">
+                      <h4 className='comment-username'>{x.username}</h4>
+                      <p className='usercomment'>{x.comments}</p>
+
+                    </div>
                   </div>
                 ))}
               </div>

@@ -23,7 +23,9 @@ const AddingEvent = ({setToggleCreateEvent,toggleCreateEvent,addevent}) => {
                 <label>Event Description</label>
                 <textarea   className={`${styles.about} about`}></textarea>
 
-                <button className={styles.bp} onClick={()=>{addevent();setToggleCreateEvent(toggleCreateEvent*-1)}} type="submit">Create Event</button>
+                <button className={styles.bp} onClick={()=>{addevent();
+                  setToggleCreateEvent(toggleCreateEvent*-1)
+                  }} type="submit">Create Event</button>
             </div>
         </div>
         </div>

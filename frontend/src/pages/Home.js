@@ -20,9 +20,8 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
       const image=document.querySelector('.image')
       const newEvent={organizer:username,about:about.value,title:eventname.value,location:location.value,time:time.value,image:image.value,comments:[]}
       
-    
       console.log(newEvent)
-      const response=await fetch('https://event-management-website-api.vercel.app/checkevent',{
+      const response=await fetch(`${process.env.REACT_APP_BASE_URL}/checkevent`,{
           method:"POST",
           headers: {
             'Content-Type': 'application/json',
@@ -36,7 +35,8 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
 
 
       if(response.ok){
-        const response=await fetch('https://event-management-website-api.vercel.app/addevent',{
+        
+        const response=await fetch(`${process.env.REACT_APP_BASE_URL}/addevent`,{
             method:"POST",
             headers: {
               'Content-Type': 'application/json',

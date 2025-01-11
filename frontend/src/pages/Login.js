@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './LoginForm.module.css';  // Assuming you want to use your friend's styling
 import { Link } from 'react-router-dom';
 
-const Login = ({ setLoggedIn }) => {
+const Login = ({ setLoggedIn,fetchUsr }) => {
     const navigate = useNavigate();
 
     const loginFunct = async () => {
@@ -12,7 +12,7 @@ const Login = ({ setLoggedIn }) => {
         const password = inputs[1].value;
 
         try {
-            const response = await fetch('https://event-management-website-api.vercel.app/login', {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -27,6 +27,7 @@ const Login = ({ setLoggedIn }) => {
                 localStorage.setItem('loggedIn', true);
                 localStorage.setItem('username', username);
                 localStorage.setItem('admin', data.admin);
+                alert(username)
                 setLoggedIn(true)
                 navigate('/');
             } else {
@@ -43,12 +44,12 @@ const Login = ({ setLoggedIn }) => {
                 <h1>Login</h1>
 
                 <div className={styles.inputbox}>
-                    <input value='harry2' type="text" placeholder="Username" />
+                    <input  type="text" placeholder="Username" />
                     <i className="bx bxs-user"></i>
                 </div>
 
                 <div className={styles.inputbox}>
-                    <input value='harry2' type="password" placeholder="Password" />
+                    <input  type="password" placeholder="Password" />
                     <i className="bx bxs-lock-alt"></i>
                 </div>
 

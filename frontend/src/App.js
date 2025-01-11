@@ -12,13 +12,13 @@ import usrdp from './pics/x.jpg'
 import Admin from './pages/Admin'
 import './index.css'
 const App = () => {
-  
+
   const [username,setUsername]=useState()
   const [loggedIn,setLoggedIn]=useState()
   const [isAdmin,setIsAdmin]=useState()
   const [usr,setUsr]=useState()
   const [event,setEvent]=useState([])
-
+  const usrname=localStorage.getItem("username")
   // [
   //   {
   //     organiser:"Organizer",about:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea, similique, maiores eligendi voluptatem libero obcaecati in nemo dignissimos autem quia, animi incidunt molestiae nulla aliquam excepturi aspernatur ad nobis nihil. Dolorem obcaecati velit voluptatem suscipit veritatis rerum fuga? Deleniti iusto similique hic cum distinctio magnam quo. Mollitia, eos. Nam sunt explicabo molestiae voluptate sapiente ad impedit sed ipsam eius architecto?",
@@ -45,40 +45,37 @@ const App = () => {
   //saving loggedIn,isAdmin,username  on local storage
   //setting all in home as on jumping from login to home, useEffect gets executed without user actually reloading the site
  
+  //moving from one to other acc, profile pic still shows of previous accc
 
   // useEffect(()=>{
   //   console.log('usr update prompt is out')
   // },[usr]) //this is for live updating liked/registerd events to usr when moved out from events page
 
   const fetchUsr=async()=>{
-    const username_useractivity=username;
-    console.log(username_useractivity)
-
-    
-    const response=await fetch('https://event-management-website-api.vercel.app/useractivity',{
+    const username_useractivity=usrname;
+    const response=await fetch(`${process.env.REACT_APP_BASE_URL}/useractivity`,{
       method:"POST",
       headers:{'Content-Type': 'application/json'},
       body:JSON.stringify({username_useractivity}),
       credentials: 'include'
     })
     const data=await response.json()
-    
       setUsr(data)//doing this as moving to other pages,fetchusr is initiated
-      // const currentTime = new Date();
-      // console.log(currentTime.toLocaleTimeString(),"usr updated")
-    
+      
   }
 
-
+  
   useEffect(()=>{
-    if(username){
+    if(usrname){
       fetchUsr();
     }
-  },[username])
+  },[usrname])
+
+  
 
   //declaring fetchEvents outside for to call again after event creation
   const fetchEvents=async()=>{      
-    const response=await fetch('https://event-management-website-api.vercel.app/userevents',{
+    const response=await fetch(`${process.env.REACT_APP_BASE_URL}/userevents`,{
       method:"GET",
       headers: {
         'Content-Type': 'application/json',
@@ -94,39 +91,38 @@ const App = () => {
   
 },[])
 
+
 useEffect(()=>{
   const currentTime = new Date();
-  const username = localStorage.getItem('username') ; 
-  const isAdmin = localStorage.getItem('isAdmin') ;
-  const loggedIn = localStorage.getItem('loggedIn') ;
+  const x1 = localStorage.getItem('username') ; 
+  const x2= localStorage.getItem('isAdmin') ;
+  const x3= localStorage.getItem('loggedIn') ;
+  // alert("from app.js",username,isAdmin,loggedIn)
 
-  setUsername(username)
-  setLoggedIn(loggedIn)//usrfetch is updated on moving to other pages, maybe because usename is updated inifinite times due to  execution of setLoggedIn() and providing loggedIn in dependency array
-  setIsAdmin(isAdmin)
+
+  setUsername(x1)
+  setLoggedIn(x3)//usrfetch is updated on moving to other pages, maybe because usename is updated inifinite times due to  execution of setLoggedIn() and providing loggedIn in dependency array
+  setIsAdmin(x2)
   
-  // console.log(loggedIn)
   // console.log(currentTime.toLocaleTimeString(),'usrname is updated')
 },[])
 
-  useEffect(()=>{
-    console.log(usr)
-
-  },[usr])
+  
   return (
     <div className='main'>
         <div className="not-sidebar">
-          <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
+          <Navbar loggedIn={loggedIn} usr={usr} setUsr={setUsr}setLoggedIn={setLoggedIn}/>
           <div className="main-content">
             <Routes>
-              <Route path='/event' element={<Event loggedIn={loggedIn} usr={usr} fetchEvents={fetchEvents}  allevent={event}/>}/>
+              <Route path='/event' element={<Event loggedIn={loggedIn} usr={usr} setUsr={setUsr} fetchEvents={fetchEvents}  allevent={event}/>}/>
               {isAdmin==='true' ?
               <Route path='/' element={<Admin/>}/>
               :
               <Route path='/' element={<Home event={event} fetchEvents={fetchEvents} setEvent={setEvent} usr={usr} username={username}  loggedIn={loggedIn}/>}/>}
               
-              <Route path='/login' element={<Login   setLoggedIn={setLoggedIn}/>}/>
+              <Route path='/login' element={<Login fetchUsr={fetchUsr}   setLoggedIn={setLoggedIn}/>}/>
               <Route path='/signup' element={<Signup/>}/>
-              <Route path='/profile' element={<Profile/>}/>
+              <Route path='/profile' element={<Profile usr={usr} setUsr={setUsr}/>}/>
             </Routes>
           </div>
         </div>
