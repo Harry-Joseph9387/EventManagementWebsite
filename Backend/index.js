@@ -307,3 +307,88 @@ app.post('/validateEmail', async (req, res) => {
   } catch (error) {
     res.status(500).json({error: 'Internal server error' });
   }})
+
+  app.get('/admindata',async(req,res)=>{
+    const users = await User.find();
+    let userDetailsList = await Promise.all(
+      users.map(async (user) => {
+        if(user.username!=="admin"){
+          const userActivity = await UserActivity.findOne({ username: user.username });
+          // console.log(userActivity.username)
+          return {
+            username: user.username,
+            email: user.email,
+            registeredEvents: userActivity?.registeredevents || [],
+            likedEvents: userActivity?.likedevents || [],
+            organizedEvents: userActivity?.organizedevents || [],
+          };
+        }
+        })
+        
+    );
+    userDetailsList=userDetailsList.filter(x=>x!==undefined)
+    const events = await Events.find();
+    const eventDetailsList = await Promise.all(
+      events.map(async (event) => {
+        const eventInfo = await EventsInfo.findOne({ eventname: event.title });
+        return {
+          eventname: event.title,
+          organizer: event.organizer,
+          likedusers: eventInfo?.likedusers || [],
+          registeredusers: eventInfo?.registeredusers || [],
+        };
+      })
+    )
+    
+    return res.status(200).json({"events":eventDetailsList,"users":userDetailsList})
+  })
+
+  app.post('/delete-user', async (req, res) => {
+    const { username } = req.body;
+  
+    try {
+      const userDeleted = await User.findOneAndDelete({ username });
+
+      const userActivityDeleted = await UserActivity.findOneAndDelete({ username }); 
+
+      const updatedEventsInfo = await EventsInfo.updateMany(
+        {},
+        {
+          $pull: { likedusers: username, registeredusers: username },
+        }
+      );
+  
+      const eventsDeleted = await Events.deleteMany({ organizer: username });
+  
+      res.status(200).json({message: 'User and associated data deleted successfully',});
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      res.status(500).json({ message: 'Internal Server Error', error });
+    }
+  });
+  
+  app.post('/delete-event', async (req, res) => {
+    const {eventname} = req.body;
+  
+    try {
+      const event = await Events.findOneAndDelete({ title: eventname });
+  
+      const eventInfo = await EventsInfo.findOneAndDelete({ eventname });
+  
+      await UserActivity.updateMany(
+        {},
+        {
+          $pull: {
+            registeredevents: eventname,
+            likedevents: eventname,
+            organizedevents: eventname,
+          },
+        }
+      );
+  
+      res.status(200).json({ message: 'Event deleted successfully', deletedEvent: event });
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      res.status(500).json({ message: 'Internal Server Error', error });
+    }
+  });

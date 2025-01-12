@@ -3,8 +3,9 @@ import './Profile.css'
 import {useState,useEffect} from 'react'
 import userdp from '../pics/x.jpg'
 import close from "../pics/close.png"
-const Profile = ({usr,setUsr}) => {
+import RegistrationStatus from "../component/RegistrationStatus"
 
+const Profile = ({usr,setUsr}) => {
     const [userDetails,setUserDetails]=useState()
     const [organizedEvents,setOrganizedEvents]=useState()
     const [eventName,setEventName]=useState()
@@ -109,7 +110,6 @@ const Profile = ({usr,setUsr}) => {
             ].registeredusers.filter((u) => u !== user);
       
             setOrganizedEvents(updatedEvents);
-            // fetchOrganizedEvents()
           } else {
             alert(`Failed to remove ${user}.`);
           }
@@ -146,9 +146,7 @@ const Profile = ({usr,setUsr}) => {
       </div>
     
       {organizedEvents&&
-      <div className="profile-organized-events">
-        {/* <button onClick={()=>{fetchOrganizedEvents()}}>xxx</button>/ */}
-        
+      <div className="profile-organized-events">        
           {organizedEvents.map(event=>{
             return <div className="profile-each-event">
               <img className='profile-each-event-image' src={event.image} alt="" />
@@ -159,27 +157,7 @@ const Profile = ({usr,setUsr}) => {
       </div>
       }
       {eventName  &&
-        <div className="event-status-container">
-          <img className='close' onClick={()=>{setEventName('')}}  src={close} alt="" />
-          <div className="event-status-box">
-            <h2>Registered User</h2>
-            {organizedEvents[organizedEvents.indexOf(eventName)]&&
-            <div className="event-status-inbox">
-              {organizedEvents[organizedEvents.indexOf(eventName)].registeredusers.map(user=> {
-                return <div className="event-status-user">
-                  <span>{user}</span>
-                  <button
-                    className="remove-button"
-                    onClick={() => removeUser(user)}
-                  >
-                  Remove
-                  </button>
-                      </div>
-              })}
-            </div>
-            }
-          </div>
-        </div>
+          <RegistrationStatus organizedEvents={organizedEvents} eventName={eventName} removeUser={removeUser} setEventName={setEventName}/>
       }
     </div>
         

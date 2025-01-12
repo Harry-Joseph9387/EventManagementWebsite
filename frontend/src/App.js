@@ -47,6 +47,7 @@ const App = () => {
  
   //moving from one to other acc, profile pic still shows of previous accc
 
+  //isAdmin value is not boolean, it is a "false", a string  
   // useEffect(()=>{
   //   console.log('usr update prompt is out')
   // },[usr]) //this is for live updating liked/registerd events to usr when moved out from events page
@@ -66,10 +67,11 @@ const App = () => {
 
   
   useEffect(()=>{
-    if(usrname){
+    const admin=localStorage.getItem('admin')
+    if(usrname && admin==="false"){
       fetchUsr();
     }
-  },[usrname])
+  },[usrname,isAdmin])
 
   
 
@@ -91,32 +93,32 @@ const App = () => {
   
 },[])
 
-
+useEffect(()=>{
+  console.log("isadmin",isAdmin,"loggedIn",loggedIn,"username",username)
+},[isAdmin,loggedIn,username])
 useEffect(()=>{
   const currentTime = new Date();
   const x1 = localStorage.getItem('username') ; 
-  const x2= localStorage.getItem('isAdmin') ;
+  const x2= localStorage.getItem('admin') ;
   const x3= localStorage.getItem('loggedIn') ;
-  // alert("from app.js",username,isAdmin,loggedIn)
-
 
   setUsername(x1)
   setLoggedIn(x3)//usrfetch is updated on moving to other pages, maybe because usename is updated inifinite times due to  execution of setLoggedIn() and providing loggedIn in dependency array
   setIsAdmin(x2)
   
   // console.log(currentTime.toLocaleTimeString(),'usrname is updated')
-},[])
+},[loggedIn])
 
   
   return (
     <div className='main'>
         <div className="not-sidebar">
-          <Navbar loggedIn={loggedIn} usr={usr} setUsr={setUsr}setLoggedIn={setLoggedIn}/>
+          <Navbar loggedIn={loggedIn} usr={usr} setUsr={setUsr}setLoggedIn={setLoggedIn} isAdmin={isAdmin}/>
           <div className="main-content">
             <Routes>
               <Route path='/event' element={<Event loggedIn={loggedIn} usr={usr} setUsr={setUsr} fetchEvents={fetchEvents}  allevent={event}/>}/>
-              {isAdmin==='true' ?
-              <Route path='/' element={<Admin/>}/>
+              {isAdmin!=='false' ?
+              <Route path='/' element={<Admin loggedIn={loggedIn}/>}/>
               :
               <Route path='/' element={<Home event={event} fetchEvents={fetchEvents} setEvent={setEvent} usr={usr} username={username}  loggedIn={loggedIn}/>}/>}
               

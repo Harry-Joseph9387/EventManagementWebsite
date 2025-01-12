@@ -27,7 +27,6 @@ const Login = ({ setLoggedIn,fetchUsr }) => {
                 localStorage.setItem('loggedIn', true);
                 localStorage.setItem('username', username);
                 localStorage.setItem('admin', data.admin);
-                alert(username)
                 setLoggedIn(true)
                 navigate('/');
             } else {
