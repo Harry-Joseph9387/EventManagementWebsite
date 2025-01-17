@@ -3,11 +3,14 @@ import "./Admin.css"
 import {useEffect,useState} from 'react'
 import RegistrationStatus from "../component/RegistrationStatus"
 import AddingEvent from '../component/AddingEvent'
-const Admin = ({loggedIn}) => {
+const Admin = ({loggedIn,addevent}) => {
   const [adminData,setAdminData]=useState()
   const [eventName,setEventName]=useState()
   const [toggleCreateEvent,setToggleCreateEvent]=useState(-1)
-
+  const [isAdmin,setIsAdmin]=useState(true)
+  const [mainUser,setMainUser]=useState("admin")
+  // const [organizedEvents,setOrganizedEvents]=useState()
+  //when admin updates other's event, admin becomes the organiser of that event
   const fetchAdminData=async()=>{
     const response=await fetch(`${process.env.REACT_APP_BASE_URL}/admindata`,
     {
@@ -73,7 +76,7 @@ const Admin = ({loggedIn}) => {
           };
         });
   
-        const updatedEvents = adminData.events.filter(event => event.eventname !== eventname);
+        const updatedEvents = adminData.events.filter(event => event.title !== eventname);
   
         setAdminData({
           users: updatedUsers,
@@ -88,28 +91,36 @@ const Admin = ({loggedIn}) => {
       console.error('Error deleting event:', error);
     }
   }
-  const removeUser = async (user) => {
+  const removeUser = async (user,x) => {
     try {
+      console.log("removeUser:",eventName)
       const response = await fetch(`${process.env.REACT_APP_BASE_URL}/removeregistereduser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          eventName: eventName.eventname,
+          eventName: eventName.title,
           user: user,
         }),
       });
+      //no problem in response.ok
+      console.log(eventName)
       if (response.ok) {
-        const index = adminData.events.indexOf(eventName);
-        // alert(index)
+        console.log("x removeUser,",x)
+        // const index = adminData.events.indexOf(eventName);
+        const index = adminData.events.findIndex(event => event.title === eventName.title);
+
         const updated=adminData.events.map((event,i)=>{
           if(i===index){
+            console.log("the updated",{...event,registeredusers:event.registeredusers.filter(eachUser=>eachUser!==user)})
             return {...event,registeredusers:event.registeredusers.filter(eachUser=>eachUser!==user)}
           }
           return event
         })
-        console.log(updated)
+        console.log("updated,unUpdated removeUser",updated)
+
+       
         // setAdminData({users:adminData.users,events:updated})
         setAdminData((prevData) => ({
           ...prevData,
@@ -120,60 +131,12 @@ const Admin = ({loggedIn}) => {
     catch(err){}
   }
 
-  const addevent=async()=>{
-    if(loggedIn){
-      const eventname=document.querySelector('.eventname');
-      const location=document.querySelector('.location');
-      const about=document.querySelector('.about');
-      const time=document.querySelector('.time');
-      const image=document.querySelector('.image')
-      const newEvent={organizer:"admin",about:about.value,title:eventname.value,location:location.value,time:time.value,image:image.value,comments:[]}
-      
-      console.log(newEvent)
-      const response=await fetch(`${process.env.REACT_APP_BASE_URL}/checkevent`,{
-          method:"POST",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newEvent),
-          credentials: 'include'
-        })
-      
-      
-      const data1=await response.json()
 
-
-      if(response.ok){
-        
-        const response=await fetch(`${process.env.REACT_APP_BASE_URL}/addevent`,{
-            method:"POST",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newEvent),
-            credentials: 'include'
-          })
-        const data2=await response.json()
-        console.log(data2)
-        fetchAdminData();
-        }
-      else{
-          console.log("already exirst")
-        }
-
-        
-        alert(Object.values(data1))
-      }
-    else{
-      // navigate('/login')
-    }
-    }
+  
 
   useEffect(()=>{
     if(adminData){
-      const currentTime = new Date();
-      console.log(currentTime.seconds,adminData)
-      // alert(adminData.events)
+      // console.log(adminData)
     }
   },[adminData])
   useEffect(()=>{fetchAdminData()},[])
@@ -199,20 +162,20 @@ const Admin = ({loggedIn}) => {
                   
                   {adminData.events.map(event=>{
                     return <div class="event-row">
-                    <div class="event-name">{event.eventname}</div>
+                    <div class="event-name">{event.title}</div>
                     <div class="event-date">{event.organizer}</div>
                     <div class="event-registrations">
                       <button class="edit-btn" onClick={()=>{setEventName(event)}}>View</button>
                     </div>
                     <div class="event-actions">
-                        <button class="delete-btn" onClick={()=>{deleteEvent(event.eventname)}}>Delete</button>
+                        <button class="delete-btn" onClick={()=>{deleteEvent(event.title)}}>Delete</button>
                     </div>
                 </div>
                   })}
                 </div>
               }
               {eventName&& 
-                <RegistrationStatus key={adminData.events.length} organizedEvents={adminData.events} eventName={eventName} setEventName={setEventName} removeUser={removeUser}/>
+                <RegistrationStatus  fetchAdminData={fetchAdminData} mainUser={mainUser} isAdmin={isAdmin} addevent={addevent} key={adminData.events.length} organizedEvents={adminData.events} eventName={eventName} setEventName={setEventName} removeUser={removeUser}/>
               }
             </div>
 
@@ -220,7 +183,7 @@ const Admin = ({loggedIn}) => {
             <button class="add-event-btn" onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}}>Add New Event</button>
              {toggleCreateEvent===1&&
               <div className="admin-addingevent-container">
-                  <AddingEvent setToggleCreateEvent={setToggleCreateEvent} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
+                  <AddingEvent  fetchAdminData={fetchAdminData} isUpdate={false}  setToggleCreateEvent={setToggleCreateEvent} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
               </div>
               }
 

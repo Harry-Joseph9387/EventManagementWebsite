@@ -8,57 +8,9 @@ import close from '../pics/close.png'
 import AddingEvent from '../component/AddingEvent';
 import {useNavigate} from 'react-router-dom'
 
-const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
-  const navigate=useNavigate()  
+const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username,addevent}) => {
   const [toggleCreateEvent,setToggleCreateEvent]=useState(-1)
-  const addevent=async()=>{
-    if(loggedIn){
-      const eventname=document.querySelector('.eventname');
-      const location=document.querySelector('.location');
-      const about=document.querySelector('.about');
-      const time=document.querySelector('.time');
-      const image=document.querySelector('.image')
-      const newEvent={organizer:username,about:about.value,title:eventname.value,location:location.value,time:time.value,image:image.value,comments:[]}
-      
-      console.log(newEvent)
-      const response=await fetch(`${process.env.REACT_APP_BASE_URL}/checkevent`,{
-          method:"POST",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newEvent),
-          credentials: 'include'
-        })
-      
-      
-      const data1=await response.json()
-
-
-      if(response.ok){
-        
-        const response=await fetch(`${process.env.REACT_APP_BASE_URL}/addevent`,{
-            method:"POST",
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newEvent),
-            credentials: 'include'
-          })
-        const data2=await response.json()
-        console.log(data2)
-        fetchEvents();
-        }
-      else{
-          console.log("already exirst")
-        }
-
-        
-        alert(Object.values(data1))
-      }
-    else{
-      navigate('/login')
-    }
-    }
+ 
 
     
     
@@ -108,7 +60,7 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username}) => {
         <button className='host' onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}}>Host</button>
       </div>
       {toggleCreateEvent===1&&
-        <AddingEvent setToggleCreateEvent={setToggleCreateEvent} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
+        <AddingEvent isAdmin={false} setToggleCreateEvent={setToggleCreateEvent} isUpdate={false} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
       }
     </div>
   );

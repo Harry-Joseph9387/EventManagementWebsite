@@ -11,6 +11,8 @@ import {useState} from 'react'
 import usrdp from './pics/x.jpg'
 import Admin from './pages/Admin'
 import './index.css'
+import {useNavigate} from 'react-router-dom'
+
 const App = () => {
 
   const [username,setUsername]=useState()
@@ -19,6 +21,8 @@ const App = () => {
   const [usr,setUsr]=useState()
   const [event,setEvent]=useState([])
   const usrname=localStorage.getItem("username")
+  const navigate=useNavigate()  
+
   // [
   //   {
   //     organiser:"Organizer",about:"Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea, similique, maiores eligendi voluptatem libero obcaecati in nemo dignissimos autem quia, animi incidunt molestiae nulla aliquam excepturi aspernatur ad nobis nihil. Dolorem obcaecati velit voluptatem suscipit veritatis rerum fuga? Deleniti iusto similique hic cum distinctio magnam quo. Mollitia, eos. Nam sunt explicabo molestiae voluptate sapiente ad impedit sed ipsam eius architecto?",
@@ -73,7 +77,78 @@ const App = () => {
     }
   },[usrname,isAdmin])
 
+  // alert("mainUser to be passed for sending email respective to one who updated it")
+  //2nd update of event not possible unless reloading the page
+  const addevent=async(isUpdate,oldEventName,isAdmin,mainUser)=>{
+    if(loggedIn){
+      const eventname=document.querySelector('.eventname');
+      const location=document.querySelector('.location');
+      const about=document.querySelector('.about');
+      const time=document.querySelector('.time');
+      const image=document.querySelector('.image')
+      const newEvent={organizer:isAdmin?"admin":username,
+        about:about.value,title:eventname.value,location:location.value,time:time.value,image:image.value,comments:[]}
+      console.log("newEvent.organizer",newEvent.organizer,"isUpdate:",isUpdate)
+      if(isUpdate){
+        const response1=await fetch(`${process.env.REACT_APP_BASE_URL}/updateevent`,{
+          method:"POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({newEvent,oldEventName,mainUser}),
+          credentials: 'include'
+        })
+        const data2=await response1.json()
+        console.log(data2)
+        alert(Object.values(data2))
+        return "true"
+
+
+      }
+      else{
+
+        const response=await fetch(`${process.env.REACT_APP_BASE_URL}/checkevent`,{
+          method:"POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({newEvent}),
+          credentials: 'include'
+        })
+      
+      const data1=await response.json()
+    
+        if(response.ok){
+          const response1=await fetch(`${process.env.REACT_APP_BASE_URL}/addevent`,{
+              method:"POST",
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(newEvent),
+              credentials: 'include'
+            })
+            const data2=await response1.json()
+            console.log(data2)
+        fetchEvents();
+
+        return "true";
   
+  
+        }
+        else{
+            alert("already exist")
+          }
+
+      }
+
+      
+        
+      }
+    else{
+      navigate('/login')
+    }
+    }
+  // alert("addevent and updateevent clash in adminjs updating sections ")
 
   //declaring fetchEvents outside for to call again after event creation
   const fetchEvents=async()=>{      
@@ -118,13 +193,13 @@ useEffect(()=>{
             <Routes>
               <Route path='/event' element={<Event loggedIn={loggedIn} usr={usr} setUsr={setUsr} fetchEvents={fetchEvents}  allevent={event}/>}/>
               {isAdmin!=='false' ?
-              <Route path='/' element={<Admin loggedIn={loggedIn}/>}/>
+              <Route path='/' element={<Admin addevent={addevent} loggedIn={loggedIn}/>}/>
               :
-              <Route path='/' element={<Home event={event} fetchEvents={fetchEvents} setEvent={setEvent} usr={usr} username={username}  loggedIn={loggedIn}/>}/>}
+              <Route path='/' element={<Home event={event} addevent={addevent} fetchEvents={fetchEvents} setEvent={setEvent} usr={usr} username={username}  loggedIn={loggedIn}/>}/>}
               
               <Route path='/login' element={<Login fetchUsr={fetchUsr}   setLoggedIn={setLoggedIn}/>}/>
               <Route path='/signup' element={<Signup/>}/>
-              <Route path='/profile' element={<Profile usr={usr} setUsr={setUsr}/>}/>
+              <Route path='/profile' element={<Profile usr={usr} setUsr={setUsr} addevent={addevent}/>}/>
             </Routes>
           </div>
         </div>

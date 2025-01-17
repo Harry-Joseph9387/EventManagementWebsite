@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import React from 'react';
 import './Event.css';
 import backgroundIMage from '../pics/images.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -55,7 +56,8 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
 
   //live update of button's name
   useEffect(()=>{
-    if(usr&&temporaryUsr&&currentEvent){
+    if(usr&&temporaryUsr&&currentEvent&&temporaryUsr.likedusers){
+      console.log( "from evetns.js,error while logging out",temporaryUsr,temporaryUsr.likedevents)
       const isLiked = temporaryUsr.likedevents.includes(currentEvent.title);
       const isRegistered = temporaryUsr.registeredevents.includes(currentEvent.title);
       if(isLiked){

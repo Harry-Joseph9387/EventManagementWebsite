@@ -5,10 +5,11 @@ import userdp from '../pics/x.jpg'
 import close from "../pics/close.png"
 import RegistrationStatus from "../component/RegistrationStatus"
 
-const Profile = ({usr,setUsr}) => {
+const Profile = ({usr,setUsr,addevent}) => {
     const [userDetails,setUserDetails]=useState()
     const [organizedEvents,setOrganizedEvents]=useState()
     const [eventName,setEventName]=useState()
+    const [mainUser,setMainUser]=useState(localStorage.getItem("username"))
       const handleEdit = () => {
         const newName = prompt("Enter new name:", userDetails.username);
         const newEmail = prompt("Enter new email:", userDetails.email);
@@ -79,14 +80,11 @@ const Profile = ({usr,setUsr}) => {
         const data=await response.json()
         setOrganizedEvents(data)
       }
-      useEffect(()=>{
-        console.log(organizedEvents)
-      },[fetchOrganizedEvents])
+      
 
       useEffect(()=>{
         if(organizedEvents){
-        console.log(organizedEvents[organizedEvents.indexOf(eventName)])
-        console.log(eventName)
+       
         }
       },[eventName,organizedEvents])
       const removeUser = async (user) => {
@@ -101,10 +99,11 @@ const Profile = ({usr,setUsr}) => {
               user: user,
             }),
           });
-          alert(response.ok)
           if (response.ok) {
             const updatedEvents = [...organizedEvents];
-            const eventIndex = organizedEvents.indexOf(eventName);
+            // const eventIndex = organizedEvents.indexOf(eventName);
+            const eventIndex = organizedEvents.findIndex(event => event.title === eventName.title);
+
             updatedEvents[eventIndex].registeredusers = updatedEvents[
               eventIndex
             ].registeredusers.filter((u) => u !== user);
@@ -118,6 +117,7 @@ const Profile = ({usr,setUsr}) => {
           alert("An error occurred. Please try again.");
         }
       };
+     
   return (
     <div className="profile-main">
       {(userDetails&& usr)&&
@@ -152,12 +152,13 @@ const Profile = ({usr,setUsr}) => {
               <img className='profile-each-event-image' src={event.image} alt="" />
               <p className='profile-each-event-title'>{event.title}</p>
               <div onClick={()=>{setEventName(event)}} className="overlay"></div>
+              <button className="profile-each-event-delete">delete</button>
             </div>
           } )}
       </div>
       }
       {eventName  &&
-          <RegistrationStatus organizedEvents={organizedEvents} eventName={eventName} removeUser={removeUser} setEventName={setEventName}/>
+          <RegistrationStatus mainUser={mainUser} isAdmin={false} addevent={addevent} fetchOrganizedEvents={fetchOrganizedEvents} organizedEvents={organizedEvents} eventName={eventName} removeUser={removeUser} setEventName={setEventName}/>
       }
     </div>
         

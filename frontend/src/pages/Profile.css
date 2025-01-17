@@ -135,7 +135,7 @@
     transition: background-color 0.2s ease;
   }
   
-  .profile-each-event .overlay:hover {
+  .profile-each-event .overlay:hover  {
     background-color: rgba(0, 0, 0, 0.285);  
     width: 100%;
     z-index: 20;
@@ -147,7 +147,7 @@
   
   .profile-each-event-title {
     position: absolute;
-    z-index: 30;
+    z-index:30;
     color: white;
     font-size: larger;
     bottom: 5px;
@@ -208,12 +208,13 @@
     flex-direction: column;
     gap: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    padding: 20px 0px;
 }
 
 .event-status-inbox {
     border: 1px solid #555;
     height: 80%;
-    width: 90%;
+    width: 89%;
     background-color: #1a1a1a;
     display: flex;
     align-items: flex-start;
@@ -264,4 +265,11 @@
 
 .event-status-box h2{
   color:white;
+}
+
+.profile-each-event-delete{
+  z-index: 30;
+  position: absolute;
+  width:50px;
+  height: 50px;
 }

@@ -93,7 +93,9 @@ app.get('/userevents',async(req,res)=>{
 })
 app.post('/checkevent',async(req,res)=>{
   try{
-    const event=req.body
+    // const event=req.body
+    const event=req.body.newEvent //doing this for updating event to work
+    console.log(event)
     const isEventExist=await Events.findOne({title:event.title})
     if(isEventExist){
       return res.status(403).json({message:'event already exist'})
@@ -112,6 +114,7 @@ app.post('/addevent',async(req,res)=>{
     const {organizer,about,title,location,time,image,comments}=event
     const addingEvent=new Events({organizer,about,title,location,time,comments,image})
     let organizer_user=await UserActivity.findOne({username:organizer})
+    console.log(organizer)
     console.log(event)
     if(organizer_user.organizedevents){
       organizer_user.organizedevents=[...organizer_user.organizedevents,event.title]
@@ -153,6 +156,7 @@ app.post('/addlikedregistered',async(req,res)=>{
     const {temporaryUsr,tempEventsInfo}=req.body
     const username=temporaryUsr.username
     const eventname=tempEventsInfo.eventname
+    // console.log("temporaryusr",temporaryUsr,"tempEventsInfo",tempEventsInfo)
     const useractivity=await UserActivity.findOneAndReplace({username:username},temporaryUsr,{new:true})
     const eventsinfo=await EventsInfo.findOneAndReplace({eventname:eventname},tempEventsInfo,{new:true})
     if (!useractivity) {
@@ -260,7 +264,12 @@ app.post('/organizedevents',async(req,res)=>{
   useractivity.organizedevents.map(async eventtitle=>{
     const eachevent=await Events.findOne({title:eventtitle})
     const eacheventinfo=await EventsInfo.findOne({eventname:eventtitle})
-    return{"title":eventtitle,"image":eachevent.image,"registeredusers":eacheventinfo.registeredusers,"likedusers":eacheventinfo.likedusers}
+    console.log(eacheventinfo)
+    console.log(eventtitle)
+    return{"title":eventtitle,
+          "image":eachevent?eachevent.image:"",
+          "registeredusers":eacheventinfo.registeredusers,
+          "likedusers":eacheventinfo.likedusers}
   }))
   // console.log(data)
   return res.status(200).json(data)
@@ -269,26 +278,28 @@ app.post('/organizedevents',async(req,res)=>{
 
 app.post('/removeregistereduser',async(req,res)=>{
   const {eventName,user}=req.body
+  console.log(eventName)
   const useractivity=await UserActivity.findOne({username:user})
   const eventsinfo=await EventsInfo.findOne({eventname:eventName})
   const event=await Events.findOne({title:eventName})
   const userDetails=await User.findOne({username:user})
   eventsinfo.registeredusers=eventsinfo.registeredusers.filter(x=>x!=user)
   useractivity.registeredevents=useractivity.registeredevents.filter(x=>x!=eventName)
-  const transporter = nodemailer.createTransport({
-    service: 'Gmail', 
-    auth: {
-      user: process.env.EMAIL_USER, 
-      pass: process.env.EMAIL_PASS, 
-    },
-  });
-  const mailOptions = {
-    from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
-    to: userDetails.email, // recipient's email
-    subject: `You have been removed from the event: ${eventName}`,
-    text: `Dear ${user},\n\nYou have been removed from the event: "${eventName}" by the organizer "${event.organizer}".\n\nIf you have any questions, please contact the event organizer.\n\nBest regards,\nEvent Management App Team`,
-  };
-  await transporter.sendMail(mailOptions);
+  // console.log(eventsinfo,useractivity)
+  // const transporter = nodemailer.createTransport({
+  //   service: 'Gmail', 
+  //   auth: {
+  //     user: process.env.EMAIL_USER, 
+  //     pass: process.env.EMAIL_PASS, 
+  //   },
+  // });
+  // const mailOptions = {
+  //   from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+  //   to: userDetails.email, // recipient's email
+  //   subject: `You have been removed from the event: ${eventName}`,
+  //   text: `Dear ${user},\n\nYou have been removed from the event: "${eventName}" by the organizer "${event.organizer}".\n\nIf you have any questions, please contact the event organizer.\n\nBest regards,\nEvent Management App Team`,
+  // };
+  // await transporter.sendMail(mailOptions);
   await eventsinfo.save()
   await useractivity.save()
   return res.status(200).json()
@@ -332,7 +343,7 @@ app.post('/validateEmail', async (req, res) => {
       events.map(async (event) => {
         const eventInfo = await EventsInfo.findOne({ eventname: event.title });
         return {
-          eventname: event.title,
+          title: event.title,
           organizer: event.organizer,
           likedusers: eventInfo?.likedusers || [],
           registeredusers: eventInfo?.registeredusers || [],
@@ -347,6 +358,22 @@ app.post('/validateEmail', async (req, res) => {
     const { username } = req.body;
   
     try {
+      const x=await User.find({username:username})
+      console.log(x)
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail', 
+        auth: {
+          user: process.env.EMAIL_USER, 
+          pass: process.env.EMAIL_PASS, 
+        },
+      });
+      const mailOptions = {
+        from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+        to: x[0].email, // recipient's email
+        subject: `Deletion of user ${username}`,
+        text: `Dear ${username},\n\n Your account is Deleted by the Admin.\n\n Contact the Admin for more details .\n\nBest regards,\nEvent Management App Team`,
+      };
+      await transporter.sendMail(mailOptions);
       const userDeleted = await User.findOneAndDelete({ username });
 
       const userActivityDeleted = await UserActivity.findOneAndDelete({ username }); 
@@ -369,10 +396,65 @@ app.post('/validateEmail', async (req, res) => {
   
   app.post('/delete-event', async (req, res) => {
     const {eventname} = req.body;
-  
+    const mainUser="admin"
     try {
+
+      const x=await EventsInfo.findOne({eventname})
+      const z=await Events.findOne({title:eventname})
+      const z2=await User.findOne({username:z.organizer})
+      const organizer={"organizer":z.organizer,"email":z2.email}
+      const registeredUsersEmail=await Promise.all(x.registeredusers.map(async user=>{
+          const y=await User.find({username:user})
+          return {"username":y[0].username,"email":y[0].email}
+      }))
+      console.log('organizer',organizer)
+      if(registeredUsersEmail.length!==0){
+        registeredUsersEmail.map(async user=>{
+          console.log("emai:",user.email,"username:",user.username,"eventname",eventname,"\n\n")
+          const transporter = nodemailer.createTransport({
+            service: 'Gmail', 
+            auth: {
+              user: process.env.EMAIL_USER, 
+              pass: process.env.EMAIL_PASS, 
+            },
+          });
+          const mailOptions = {
+            from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+            to: user.email, 
+            subject: `Deletion of Event ${eventname}`,
+            text: `Dear ${user.username},\n\n The event: "${eventname}" by the organizer "${organizer.organizer}" is Deleted by the ${mainUser}.\n\n We appologises for the inconvinences.\n\nBest regards,\nEvent Management App Team`,
+          };
+          await transporter.sendMail(mailOptions);
+          
+      })
+      }
+      if(mainUser==="admin"){
+        if(organizer.organizer!=="admin"){
+
+          const transporter = nodemailer.createTransport({
+            service: 'Gmail', 
+            auth: {
+              user: process.env.EMAIL_USER, 
+              pass: process.env.EMAIL_PASS, 
+            },
+          });
+
+          const mailOptions = {
+            from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+            to: organizer.email, // recipient's email
+            subject: `Deletion of Event ${eventname}`,
+            text: `Dear ${organizer.organizer},\n\n The event: "${eventname}" by the organizer "${organizer.organizer}" is Deleted by the ${mainUser}.\n\n Contact the admin for more details.\n\nBest regards,\nEvent Management App Team`,
+          };
+
+          await transporter.sendMail(mailOptions);
+      }
+    }
+
+
+
       const event = await Events.findOneAndDelete({ title: eventname });
-  
+
+      
       const eventInfo = await EventsInfo.findOneAndDelete({ eventname });
   
       await UserActivity.updateMany(
@@ -385,10 +467,125 @@ app.post('/validateEmail', async (req, res) => {
           },
         }
       );
-  
-      res.status(200).json({ message: 'Event deleted successfully', deletedEvent: event });
+      
+      res.status(200).json({ message: 'Event deleted successfully'});
     } catch (error) {
       console.error('Error deleting event:', error);
       res.status(500).json({ message: 'Internal Server Error', error });
     }
   });
+
+  app.post('/updateevent',async(req,res)=>{
+    const {newEvent,oldEventName,mainUser}=req.body
+
+    let canUpdate=false
+    if(oldEventName===newEvent.title){
+      canUpdate=true
+    }
+    else{
+      const newEventCheck=await Events.find({title:newEvent.title})
+      if(newEventCheck.length===0){
+        canUpdate=true
+      }
+    }
+    console.log(mainUser,oldEventName)
+    if(canUpdate){
+      if(mainUser==="admin"){
+         const fetchOrganizer=await Events.findOne({title:oldEventName})
+         newEvent.organizer=fetchOrganizer.organizer
+      }
+      const eventReplaceStatus=await Events.findOneAndReplace(
+      {title:oldEventName},
+      newEvent,
+      {new:true}
+    )
+    const eventInfoUpdate=await EventsInfo.findOne({eventname:oldEventName})
+    eventInfoUpdate.eventname=newEvent.title
+    await eventInfoUpdate.save()
+
+    const userActivity=await UserActivity.find({})
+
+    console.log("before---------------------------------",userActivity)
+    for(const user of userActivity){
+      user.registeredevents=user.registeredevents.map(event=>{return event===oldEventName?newEvent.title:event})
+      user.likedevents=user.likedevents.map(event=>{return event===oldEventName?newEvent.title:event})
+      user.organizedevents=user.organizedevents.map(event=>{return event===oldEventName?newEvent.title:event})
+      await user.save()
+    }
+    // console.log("after---------------------------------",userActivity)
+
+    // console.log(userActivity)
+    
+  
+    if(eventReplaceStatus){
+      const eventname=newEvent.title
+      const x=await EventsInfo.findOne({eventname})
+      const z=await Events.findOne({title:eventname})
+      const z2=await User.findOne({username:z.organizer})
+      const organizer={"organizer":z.organizer,"email":z2.email}
+      const registeredUsersEmail=await Promise.all(x.registeredusers.map(async user=>{
+          const y=await User.find({username:user})
+          return {"username":y[0].username,"email":y[0].email}
+      }))
+      // console.log('organizer',organizer)
+      // if(registeredUsersEmail.length!==0){
+      //   registeredUsersEmail.map(async user=>{
+      //     console.log("emai:",user.email,"username:",user.username,"eventname",eventname,"\n\n")
+      //     const transporter = nodemailer.createTransport({
+      //       service: 'Gmail', 
+      //       auth: {
+      //         user: process.env.EMAIL_USER, 
+      //         pass: process.env.EMAIL_PASS, 
+      //       },
+      //     });
+      //     const mailOptions = {
+      //       from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+      //       to: user.email, 
+      //       subject: `Updation of Event ${eventname}`,
+      //       text: `Dear ${user.username},\n\n
+      //       The event: "${oldEventName}" by the organizer "${organizer.organizer}"is updated by the ${mainUser}.\n\n 
+      //       The Details:\n\n
+      //       title:${newEvent.title!==oldEventName?newEvent.title:oldEventName}\n\n
+      //       organizer:${newEvent.organizer}\n\n
+      //       location:${newEvent.location}\n\n
+      //       date:${newEvent.time}\n\n
+      //       \n\nBest regards,\nEvent Management App Team`,
+      //     };
+      //     await transporter.sendMail(mailOptions);
+          
+      // })}
+      // if(mainUser==="admin"){
+      //   const transporter = nodemailer.createTransport({
+      //     service: 'Gmail', 
+      //     auth: {
+      //       user: process.env.EMAIL_USER, 
+      //       pass: process.env.EMAIL_PASS, 
+      //     },
+      //   });
+      //   const mailOptions = {
+      //     from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+      //     to: organizer.email, 
+      //     subject: `Updation of Event ${eventname}`,
+      //     text: `Dear ${organizer.username},\n\n
+      //     The event: "${oldEventName}" by the organizer "${organizer.organizer}"
+      //     is updated by the ${mainUser}.\n\n 
+      //     The Details:\n\n
+      //     \ttitle:${newEvent.title!==oldEventName?newEvent.title:oldEventName}\n\n
+      //     \torganizer:${newEvent.organizer}\n\n
+      //     \tlocation:${newEvent.location}\n\n
+      //     \tdate:${newEvent.time}\n\n
+      //     \n\nBest regards,\nEvent Management App Team`,
+      //   };
+      //   await transporter.sendMail(mailOptions);
+      // }
+      res.status(200).json({ message:"update successful" });
+    }
+    else {
+      res.status(404).json({message: "error while updating" });
+    }
+    }
+    else{
+      return res.status(403).json({message:"New Event's name is not unique"})
+    }
+    
+  })
