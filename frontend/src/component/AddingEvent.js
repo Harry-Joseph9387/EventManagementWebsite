@@ -54,8 +54,10 @@ const AddingEvent = ({setEventName,fetchAdminData,isAdmin,mainUser,setToggleCrea
   }
   
   useEffect(()=>{
+    if(isUpdate){
       fetchEvent()
-  },[])
+    }
+  },[isUpdate])
 
   // useEffect(()=>{
   //   console.log("oldDetails",oldDetails)
