@@ -30,21 +30,24 @@ const AddingEvent = ({setEventName,fetchAdminData,isAdmin,mainUser,setToggleCrea
   }
 
   const funct=async()=>{
+    console.log(isAdmin)
     const newEventNameInputed=document.querySelector(".eventname")
     const x={"title":newEventNameInputed.value,"organizer":oldDetails.organizer,"registeredusers":oldDetails.registeredusers,likedusers:oldDetails.likedusers}
-    setEventName((prevValue)=>({"title":newEventNameInputed.value,"organizer":oldDetails.organizer,"registeredusers":oldDetails.registeredusers,likedusers:oldDetails.likedusers}))
+    if(isUpdate){
+      setEventName((prevValue)=>({"title":newEventNameInputed.value,"organizer":oldDetails.organizer,"registeredusers":oldDetails.registeredusers,likedusers:oldDetails.likedusers}))
+    }    
+    
     const status=await addevent(isUpdate,oldEventName,isAdmin,mainUser)
     if(isAdmin){
       fetchAdminData()
     }
     else{
-      console.log("initiated fetchOrganizedEvents at adding events")
       fetchOrganizedEvents()
     }
   
-    if(status==="true"){
-      fetchEvent(x)
+    if(status){
       if(isUpdate){
+        fetchEvent(x)
         setTriggerUpdateEvent(triggerUpdateEvent*-1)// purpose of this is to reset the oldEventName, if not present , error of not showing existence of oldEventName
       }
       else{

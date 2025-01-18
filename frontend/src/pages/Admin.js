@@ -183,7 +183,7 @@ const Admin = ({loggedIn,addevent}) => {
             <button class="add-event-btn" onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}}>Add New Event</button>
              {toggleCreateEvent===1&&
               <div className="admin-addingevent-container">
-                  <AddingEvent  fetchAdminData={fetchAdminData} isUpdate={false}  setToggleCreateEvent={setToggleCreateEvent} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
+                  <AddingEvent setEventName={setEventName} isAdmin={isAdmin} fetchAdminData={fetchAdminData} isUpdate={false}  setToggleCreateEvent={setToggleCreateEvent} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
               </div>
               }
 

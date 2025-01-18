@@ -33,7 +33,6 @@ const RegistrationStatus = ({fetchAdminData,isAdmin,mainUser,organizedEvents,fet
     }
    },[eventName,isAdmin])
 
-
   //here the eventName is not literally the event's name, it is the object containing all event details of a specific event
   return (
     <div className='event-status-container'>

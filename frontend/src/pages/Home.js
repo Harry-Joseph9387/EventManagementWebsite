@@ -60,7 +60,7 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username,addevent}) => {
         <button className='host' onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}}>Host</button>
       </div>
       {toggleCreateEvent===1&&
-        <AddingEvent isAdmin={false} setToggleCreateEvent={setToggleCreateEvent} isUpdate={false} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
+        <AddingEvent fetchOrganizedEvents={fetchEvents} isAdmin={false} setToggleCreateEvent={setToggleCreateEvent} isUpdate={false} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
       }
     </div>
   );
