@@ -26,5 +26,8 @@
 ->admin 
     ->host new events 
     ->can delete or update others events
-    ->can remove registered users from other events
+        ->alerts registered users about update through email
+    ->can remove registered users from others events
+        ->alerts registered users about  through email
     ->can delete users 
+        ->alerts  users  through email

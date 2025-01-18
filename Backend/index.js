@@ -286,20 +286,20 @@ app.post('/removeregistereduser',async(req,res)=>{
   eventsinfo.registeredusers=eventsinfo.registeredusers.filter(x=>x!=user)
   useractivity.registeredevents=useractivity.registeredevents.filter(x=>x!=eventName)
   // console.log(eventsinfo,useractivity)
-  // const transporter = nodemailer.createTransport({
-  //   service: 'Gmail', 
-  //   auth: {
-  //     user: process.env.EMAIL_USER, 
-  //     pass: process.env.EMAIL_PASS, 
-  //   },
-  // });
-  // const mailOptions = {
-  //   from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
-  //   to: userDetails.email, // recipient's email
-  //   subject: `You have been removed from the event: ${eventName}`,
-  //   text: `Dear ${user},\n\nYou have been removed from the event: "${eventName}" by the organizer "${event.organizer}".\n\nIf you have any questions, please contact the event organizer.\n\nBest regards,\nEvent Management App Team`,
-  // };
-  // await transporter.sendMail(mailOptions);
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail', 
+    auth: {
+      user: process.env.EMAIL_USER, 
+      pass: process.env.EMAIL_PASS, 
+    },
+  });
+  const mailOptions = {
+    from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+    to: userDetails.email, // recipient's email
+    subject: `You have been removed from the event: ${eventName}`,
+    text: `Dear ${user},\n\nYou have been removed from the event: "${eventName}" by the organizer "${event.organizer}".\n\nIf you have any questions, please contact the event organizer.\n\nBest regards,\nEvent Management App Team`,
+  };
+  await transporter.sendMail(mailOptions);
   await eventsinfo.save()
   await useractivity.save()
   return res.status(200).json()
@@ -528,56 +528,56 @@ app.post('/validateEmail', async (req, res) => {
           return {"username":y[0].username,"email":y[0].email}
       }))
       // console.log('organizer',organizer)
-      // if(registeredUsersEmail.length!==0){
-      //   registeredUsersEmail.map(async user=>{
-      //     console.log("emai:",user.email,"username:",user.username,"eventname",eventname,"\n\n")
-      //     const transporter = nodemailer.createTransport({
-      //       service: 'Gmail', 
-      //       auth: {
-      //         user: process.env.EMAIL_USER, 
-      //         pass: process.env.EMAIL_PASS, 
-      //       },
-      //     });
-      //     const mailOptions = {
-      //       from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
-      //       to: user.email, 
-      //       subject: `Updation of Event ${eventname}`,
-      //       text: `Dear ${user.username},\n\n
-      //       The event: "${oldEventName}" by the organizer "${organizer.organizer}"is updated by the ${mainUser}.\n\n 
-      //       The Details:\n\n
-      //       title:${newEvent.title!==oldEventName?newEvent.title:oldEventName}\n\n
-      //       organizer:${newEvent.organizer}\n\n
-      //       location:${newEvent.location}\n\n
-      //       date:${newEvent.time}\n\n
-      //       \n\nBest regards,\nEvent Management App Team`,
-      //     };
-      //     await transporter.sendMail(mailOptions);
+      if(registeredUsersEmail.length!==0){
+        registeredUsersEmail.map(async user=>{
+          console.log("emai:",user.email,"username:",user.username,"eventname",eventname,"\n\n")
+          const transporter = nodemailer.createTransport({
+            service: 'Gmail', 
+            auth: {
+              user: process.env.EMAIL_USER, 
+              pass: process.env.EMAIL_PASS, 
+            },
+          });
+          const mailOptions = {
+            from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+            to: user.email, 
+            subject: `Updation of Event ${eventname}`,
+            text: `Dear ${user.username},\n\n
+            The event: "${oldEventName}" by the organizer "${organizer.organizer}"is updated by the ${mainUser}.\n\n 
+            The Details:\n\n
+            title:${newEvent.title!==oldEventName?newEvent.title:oldEventName}\n\n
+            organizer:${newEvent.organizer}\n\n
+            location:${newEvent.location}\n\n
+            date:${newEvent.time}\n\n
+            \n\nBest regards,\nEvent Management App Team`,
+          };
+          await transporter.sendMail(mailOptions);
           
-      // })}
-      // if(mainUser==="admin"){
-      //   const transporter = nodemailer.createTransport({
-      //     service: 'Gmail', 
-      //     auth: {
-      //       user: process.env.EMAIL_USER, 
-      //       pass: process.env.EMAIL_PASS, 
-      //     },
-      //   });
-      //   const mailOptions = {
-      //     from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
-      //     to: organizer.email, 
-      //     subject: `Updation of Event ${eventname}`,
-      //     text: `Dear ${organizer.username},\n\n
-      //     The event: "${oldEventName}" by the organizer "${organizer.organizer}"
-      //     is updated by the ${mainUser}.\n\n 
-      //     The Details:\n\n
-      //     \ttitle:${newEvent.title!==oldEventName?newEvent.title:oldEventName}\n\n
-      //     \torganizer:${newEvent.organizer}\n\n
-      //     \tlocation:${newEvent.location}\n\n
-      //     \tdate:${newEvent.time}\n\n
-      //     \n\nBest regards,\nEvent Management App Team`,
-      //   };
-      //   await transporter.sendMail(mailOptions);
-      // }
+      })}
+      if(mainUser==="admin"){
+        const transporter = nodemailer.createTransport({
+          service: 'Gmail', 
+          auth: {
+            user: process.env.EMAIL_USER, 
+            pass: process.env.EMAIL_PASS, 
+          },
+        });
+        const mailOptions = {
+          from: `"Event Management App":${process.env.EMAIL_USER}`, // sender address
+          to: organizer.email, 
+          subject: `Updation of Event ${eventname}`,
+          text: `Dear ${organizer.username},\n\n
+          The event: "${oldEventName}" by the organizer "${organizer.organizer}"
+          is updated by the ${mainUser}.\n\n 
+          The Details:\n\n
+          \ttitle:${newEvent.title!==oldEventName?newEvent.title:oldEventName}\n\n
+          \torganizer:${newEvent.organizer}\n\n
+          \tlocation:${newEvent.location}\n\n
+          \tdate:${newEvent.time}\n\n
+          \n\nBest regards,\nEvent Management App Team`,
+        };
+        await transporter.sendMail(mailOptions);
+      }
       res.status(200).json({ message:"update successful" });
     }
     else {
