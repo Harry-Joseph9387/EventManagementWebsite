@@ -3,7 +3,7 @@ import './Components.css'
 import close from '../pics/close.png'
 import styles from './AddingEvent.module.css';
 import {useState,useEffect} from 'react'
-const AddingEvent = ({setEventName,fetchAdminData,isAdmin,mainUser,setToggleCreateEvent,fetchOrganizedEvents,triggerUpdateEvent,toggleCreateEvent,addevent,setTriggerUpdateEvent,isUpdate,eventname,eventName}) => {
+const AddingEvent = ({fetchEvents,setEventName,fetchAdminData,isAdmin,mainUser,setToggleCreateEvent,fetchOrganizedEvents,triggerUpdateEvent,toggleCreateEvent,addevent,setTriggerUpdateEvent,isUpdate,eventname,eventName}) => {
   const [oldDetails,setOldDetails]=useState(undefined)
   const [oldEventName,setOldEventName]=useState()
   const [executionStopper,setExecutionStopper]=useState(false)
@@ -31,13 +31,10 @@ const AddingEvent = ({setEventName,fetchAdminData,isAdmin,mainUser,setToggleCrea
 
   const funct=async()=>{
     console.log(isAdmin)
-    const newEventNameInputed=document.querySelector(".eventname")
-    const x={"title":newEventNameInputed.value,"organizer":oldDetails.organizer,"registeredusers":oldDetails.registeredusers,likedusers:oldDetails.likedusers}
-    if(isUpdate){
-      setEventName((prevValue)=>({"title":newEventNameInputed.value,"organizer":oldDetails.organizer,"registeredusers":oldDetails.registeredusers,likedusers:oldDetails.likedusers}))
-    }    
+    
     
     const status=await addevent(isUpdate,oldEventName,isAdmin,mainUser)
+    // const status='true'
     if(isAdmin){
       fetchAdminData()
     }
@@ -45,11 +42,18 @@ const AddingEvent = ({setEventName,fetchAdminData,isAdmin,mainUser,setToggleCrea
       fetchOrganizedEvents()
     }
   
-    if(status){
+    if(status==='true'){
+      const newEventNameInputed=document.querySelector(".eventname")
+      const x={"title":newEventNameInputed.value,"organizer":oldDetails.organizer,"registeredusers":oldDetails.registeredusers,likedusers:oldDetails.likedusers}
       if(isUpdate){
-        fetchEvent(x)
-        setTriggerUpdateEvent(triggerUpdateEvent*-1)// purpose of this is to reset the oldEventName, if not present , error of not showing existence of oldEventName
-      }
+        setEventName((prevValue)=>({"title":newEventNameInputed.value,"organizer":oldDetails.organizer,"registeredusers":oldDetails.registeredusers,likedusers:oldDetails.likedusers}))
+        if(!isAdmin){
+          fetchEvent(x)
+          fetchEvents()//for home page
+          console.log(status==='true',status,"isUpdate",isUpdate)
+          setTriggerUpdateEvent(triggerUpdateEvent*-1)// purpose of this is to reset the oldEventName, if not present , error of not showing existence of oldEventName
+        }
+      }    
       else{
         setToggleCreateEvent(toggleCreateEvent*-1)
       }
@@ -69,7 +73,7 @@ const AddingEvent = ({setEventName,fetchAdminData,isAdmin,mainUser,setToggleCrea
     <div className="createEventBody">
           <img src={close} className='close' onClick={()=>{
             if(isUpdate){
-              setTriggerUpdateEvent(triggerUpdateEvent*-1)
+              setTriggerUpdateEvent(triggerUpdateEvent*-1)// purpose of this is to reset the oldEventName, if not present , error of not showing existence of oldEventName
             }
             else{
               setToggleCreateEvent(toggleCreateEvent*-1)

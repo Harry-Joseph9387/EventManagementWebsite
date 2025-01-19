@@ -2,7 +2,7 @@ import React from 'react'
 import close from "../pics/close.png"
 import {useState,useEffect} from 'react'
 import AddingEvent from '../component/AddingEvent'
-const RegistrationStatus = ({fetchAdminData,isAdmin,mainUser,organizedEvents,fetchOrganizedEvents,eventName,removeUser,setEventName,addevent}) => {
+const RegistrationStatus = ({fetchEvents,fetchAdminData,isAdmin,mainUser,organizedEvents,fetchOrganizedEvents,eventName,removeUser,setEventName,addevent}) => {
   const [triggerUpdateEvent,setTriggerUpdateEvent]=useState(-1)
   const [isUpdate,setIsUpdate]=useState(true)
   const [event,setEvent]=useState(
@@ -44,7 +44,7 @@ const RegistrationStatus = ({fetchAdminData,isAdmin,mainUser,organizedEvents,fet
               {event.registeredusers.map(user=> {
                 return <div className="event-status-user">
                   <span>{user}</span>
-                  <span>{event.title}</span>
+                  {/* <span>{event.title}</span> */}
                   <button
                     className="remove-button"
                     onClick={() => removeUser(user,event.title)}
@@ -61,7 +61,7 @@ const RegistrationStatus = ({fetchAdminData,isAdmin,mainUser,organizedEvents,fet
             </div>
           </div>
           {triggerUpdateEvent===1 &&
-            <AddingEvent eventName={eventName} setEventName={setEventName} fetchAdminData={fetchAdminData} isAdmin={isAdmin} mainUser={mainUser} addevent={addevent} fetchOrganizedEvents={fetchOrganizedEvents} triggerUpdateEvent={triggerUpdateEvent} setTriggerUpdateEvent={setTriggerUpdateEvent} isUpdate={isUpdate} />
+            <AddingEvent fetchEvents={fetchEvents} eventName={eventName} setEventName={setEventName} fetchAdminData={fetchAdminData} isAdmin={isAdmin} mainUser={mainUser} addevent={addevent} fetchOrganizedEvents={fetchOrganizedEvents} triggerUpdateEvent={triggerUpdateEvent} setTriggerUpdateEvent={setTriggerUpdateEvent} isUpdate={isUpdate} />
           }
 
     </div>

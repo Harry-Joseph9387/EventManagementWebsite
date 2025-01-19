@@ -56,7 +56,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
 
   //live update of button's name
   useEffect(()=>{
-    if(usr&&temporaryUsr&&currentEvent&&temporaryUsr.likedusers){
+    if(usr&&temporaryUsr&&currentEvent){
       console.log( "from evetns.js,error while logging out",temporaryUsr,temporaryUsr.likedevents)
       const isLiked = temporaryUsr.likedevents.includes(currentEvent.title);
       const isRegistered = temporaryUsr.registeredevents.includes(currentEvent.title);
@@ -77,7 +77,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
         registeredButton.innerHTML='Register'
       }
     }
-  },[usr,currentEvent])
+  },[usr,currentEvent,temporaryUsr])
 
   const sendComment=async(comment)=>{
     const  currentEventTitle=currentEvent.title

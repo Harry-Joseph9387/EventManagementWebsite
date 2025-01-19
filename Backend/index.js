@@ -72,7 +72,7 @@ app.post('/signup', async (req, res) => {
 
 app.post('/useractivity',async(req,res)=>{
   const {username_useractivity}=req.body;
-
+  console.log(username_useractivity)
   let x = await UserActivity.findOne({username:username_useractivity});
   let y=await User.findOne({username:username_useractivity})
   let z={...x._doc,"image":y.image,"email":y.email,"contactNo":y.contactNo}
@@ -198,7 +198,12 @@ app.post('/updateuserinfo',async(req,res)=>{
 
 
   //username upadation on eventsinfo liked/registered users works
-  const eventsinfo=await EventsInfo.find({})
+  const x=await User.find({username: newUsername})
+  const y=await User.find({email:userDetails.email,  username: { $ne: oldusername }  })
+  // console.log(x)
+  // console.log(x.length,y.length,oldusername===newUsername,oldusername,newUsername)
+  if((x.length===0||oldusername===newUsername) && y.length===0){
+    const eventsinfo=await EventsInfo.find({})
   for (const eachEventInfo of eventsinfo){
     for (const eachLUser of eachEventInfo.likedusers){
       if(eachLUser===oldusername){
@@ -255,10 +260,17 @@ app.post('/updateuserinfo',async(req,res)=>{
   
   
   return res.status(200).json({message:"xxxxx"})
+  }
+
+  else{
+    return res.status(403).json({message:"such a username/email is already in use"})
+  }
+  
 })
 
 app.post('/organizedevents',async(req,res)=>{
   const {username}=req.body
+  console.log(username)
   const useractivity=await UserActivity.findOne({username:username})
   let data=await Promise.all(
   useractivity.organizedevents.map(async eventtitle=>{
@@ -488,12 +500,15 @@ app.post('/validateEmail', async (req, res) => {
         canUpdate=true
       }
     }
-    console.log(mainUser,oldEventName)
+    // console.log(mainUser,oldEventName)
     if(canUpdate){
       if(mainUser==="admin"){
          const fetchOrganizer=await Events.findOne({title:oldEventName})
          newEvent.organizer=fetchOrganizer.organizer
       }
+      const oldEventComments=await Events.find({title:oldEventName})
+      newEvent.comments=oldEventComments[0].comments
+      // console.log(newEvent.comments,oldEventComments[0].comments,oldEventName)
       const eventReplaceStatus=await Events.findOneAndReplace(
       {title:oldEventName},
       newEvent,
@@ -505,7 +520,7 @@ app.post('/validateEmail', async (req, res) => {
 
     const userActivity=await UserActivity.find({})
 
-    console.log("before---------------------------------",userActivity)
+    // console.log("before---------------------------------",userActivity)
     for(const user of userActivity){
       user.registeredevents=user.registeredevents.map(event=>{return event===oldEventName?newEvent.title:event})
       user.likedevents=user.likedevents.map(event=>{return event===oldEventName?newEvent.title:event})
@@ -522,6 +537,7 @@ app.post('/validateEmail', async (req, res) => {
       const x=await EventsInfo.findOne({eventname})
       const z=await Events.findOne({title:eventname})
       const z2=await User.findOne({username:z.organizer})
+      console.log("updatessssss",x,z,z2)
       const organizer={"organizer":z.organizer,"email":z2.email}
       const registeredUsersEmail=await Promise.all(x.registeredusers.map(async user=>{
           const y=await User.find({username:user})
@@ -530,7 +546,7 @@ app.post('/validateEmail', async (req, res) => {
       // console.log('organizer',organizer)
       if(registeredUsersEmail.length!==0){
         registeredUsersEmail.map(async user=>{
-          console.log("emai:",user.email,"username:",user.username,"eventname",eventname,"\n\n")
+          // console.log("emai:",user.email,"username:",user.username,"eventname",eventname,"\n\n")
           const transporter = nodemailer.createTransport({
             service: 'Gmail', 
             auth: {
@@ -554,7 +570,8 @@ app.post('/validateEmail', async (req, res) => {
           await transporter.sendMail(mailOptions);
           
       })}
-      if(mainUser==="admin"){
+      console.log(organizer)
+      if(mainUser==="admin" && organizer.organizer!=="admin"){
         const transporter = nodemailer.createTransport({
           service: 'Gmail', 
           auth: {

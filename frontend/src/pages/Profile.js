@@ -5,7 +5,7 @@ import userdp from '../pics/x.jpg'
 import close from "../pics/close.png"
 import RegistrationStatus from "../component/RegistrationStatus"
 
-const Profile = ({usr,setUsr,addevent}) => {
+const Profile = ({usr,setUsr,addevent,fetchEvents}) => {
     const [userDetails,setUserDetails]=useState()
     const [organizedEvents,setOrganizedEvents]=useState()
     const [eventName,setEventName]=useState()
@@ -31,7 +31,7 @@ const Profile = ({usr,setUsr,addevent}) => {
       const handleProfilePictureChange = () => {
         const newPicture = prompt("Enter new profile picture URL:",userDetails.image);
         setUserDetails({...userDetails,image: newPicture || userDetails.image});
-        setUsr({...usr,"image":newPicture})
+        setUsr({...usr,"image":newPicture||userDetails.image})
       };
       const fetchUser=async()=>{
         const username_fetchuser=localStorage.getItem('username')
@@ -57,7 +57,13 @@ const Profile = ({usr,setUsr,addevent}) => {
             credentials: 'include'
           })
           const data=await response.json()
-          localStorage.setItem("username",userDetails.username) //on reloading, it sends new username to fetch the user
+          if(response.ok){
+            localStorage.setItem("username",userDetails.username) //on reloading, it sends new username to fetch the user
+          }
+          else{
+            alert(Object.values(data))
+          }
+          
       }
       useEffect(()=>{
         fetchUser()
@@ -158,7 +164,7 @@ const Profile = ({usr,setUsr,addevent}) => {
       </div>
       }
       {eventName  &&
-          <RegistrationStatus mainUser={mainUser} isAdmin={false} addevent={addevent} fetchOrganizedEvents={fetchOrganizedEvents} organizedEvents={organizedEvents} eventName={eventName} removeUser={removeUser} setEventName={setEventName}/>
+          <RegistrationStatus fetchEvents={fetchEvents} mainUser={mainUser} isAdmin={false} addevent={addevent} fetchOrganizedEvents={fetchOrganizedEvents} organizedEvents={organizedEvents} eventName={eventName} removeUser={removeUser} setEventName={setEventName}/>
       }
     </div>
         

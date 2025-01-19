@@ -101,7 +101,12 @@ const App = () => {
         const data2=await response1.json()
         console.log(data2)
         alert(Object.values(data2))
-        return "true"
+        if(response1.ok){
+          return "true"
+        }
+        else{
+          return "false"
+        }
 
 
       }
@@ -137,6 +142,7 @@ const App = () => {
         }
         else{
             alert("already exist")
+            return "false"
           }
 
       }
@@ -199,7 +205,7 @@ useEffect(()=>{
               
               <Route path='/login' element={<Login fetchUsr={fetchUsr}   setLoggedIn={setLoggedIn}/>}/>
               <Route path='/signup' element={<Signup/>}/>
-              <Route path='/profile' element={<Profile usr={usr} setUsr={setUsr} addevent={addevent}/>}/>
+              <Route path='/profile' element={<Profile fetchEvents={fetchEvents} usr={usr} setUsr={setUsr} addevent={addevent}/>}/>
             </Routes>
           </div>
         </div>

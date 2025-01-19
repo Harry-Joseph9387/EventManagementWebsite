@@ -18,6 +18,8 @@
 ->profile
     ->can update profile details
         ->name,email,phone,location,bio
+        ->used username,email cannot be saved as new update
+            ->user can change their email to an unused email
     ->can see user's organized events  
         ->can see/remove registered users with an email
         ->can update the events
