@@ -43,7 +43,7 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
       credentials: 'include'
     })
     const data=await response.json()
-    alert(data,"addlikedregistered is executed")
+    // alert(data,"addlikedregistered is executed")
   }
 
 
@@ -263,3 +263,4 @@ const Event = ({ loggedIn, usr, allevent,fetchEvents }) => {
 };
 
 export default Event;
+
