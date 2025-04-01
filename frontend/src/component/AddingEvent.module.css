@@ -6,7 +6,8 @@
     height: 100vh;
     background: url('../pics/fire.jpg') no-repeat center;
     background-size: cover;
-
+    z-index: 20;
+    position: relative;
 }
 .box {
     width: 520px;
