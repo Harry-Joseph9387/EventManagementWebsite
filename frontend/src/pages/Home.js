@@ -18,6 +18,8 @@ const Home = ({event,usr,setEvent,loggedIn,fetchEvents,username,addevent}) => {
   return (
     <div className="home-main">
       <div style={{ position: 'relative', textAlign: 'center' }}>
+        username:admin,password:admin <br/>
+        username:user1,password:user1
         <img 
           src={eventImage} 
           style={{
