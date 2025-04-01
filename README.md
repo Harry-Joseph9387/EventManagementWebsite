@@ -80,5 +80,5 @@ A full-stack event management platform built using the **MERN** stack, allowing 
 
 1. **Clone the repository**
    ```sh
-   git clone https://github.com/your-username/event-management-mern.git
+   git clone https://github.com/Harry-Joseph9387/EventManagementWebsite.git
    cd event-management-mern
