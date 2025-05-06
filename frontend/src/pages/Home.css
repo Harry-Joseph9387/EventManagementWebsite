@@ -77,12 +77,13 @@
 .event {
     position: relative;
     width: 90%;
-    min-height: 80vh;
+    min-height: 76vh;
     /* margin: 20px auto; */
     overflow: visible;
     /* padding: 40px 0; */
     left: -100px;
     top: -60px;
+    max-height: 200vh;
 }
 
 
@@ -244,21 +245,42 @@
     background-color: #ff4500;
   }
 
-.x{
-  position: absolute;
+.x {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding:20px;
-  bottom: 0;
-  
-  background-color:wheat;
-  gap:10px;
-  border-radius: 30px;
+  padding: 15px 0;
+  gap: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  /* margin: 20px 0; */
+  width: 100%;
 }
-.x .host{
-  padding:0px 10px;
-  border-radius:20px;
+
+.x p {
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  font-weight: 300;
+}
+
+.x .host {
+  padding: 12px 30px;
+  border-radius: 4px;
+  background: #d4ba89;
+  color: #333;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.x .host:hover {
+  background: #c0a575;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 186, 137, 0.2);
 }
 
 .createEventBody{
@@ -269,6 +291,23 @@
   top:0;
   z-index: 20;
 }
+
+.createEventBody .close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+  z-index: 30;
+}
+
+.createEventBody .close:hover {
+  opacity: 1;
+}
+
 .createEventBox{
   width:70%;
   height:60%;
@@ -443,7 +482,14 @@
       left:0;
       top:0;
       justify-content: center;
+      min-height: unset;
       /* gap:50px; */
+     }
+     .x p{
+        font-size: 0.8rem ;
+     }
+     .x .host{
+      font-size: 0.7rem;
      }
      .intro-title-2 {
       font-size: 25px;

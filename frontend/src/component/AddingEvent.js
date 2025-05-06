@@ -71,7 +71,10 @@ const AddingEvent = ({fetchEvents,setEventName,fetchAdminData,isAdmin,mainUser,s
   // },[oldDetails])
   return (
     <div className="createEventBody">
-          <img src={close} className='close' onClick={()=>{
+          
+          <div className={styles.container}>
+            <div className={styles.box}>
+            <img src={close} className='close' onClick={()=>{
             if(isUpdate){
               setTriggerUpdateEvent(triggerUpdateEvent*-1)// purpose of this is to reset the oldEventName, if not present , error of not showing existence of oldEventName
             }
@@ -79,25 +82,58 @@ const AddingEvent = ({fetchEvents,setEventName,fetchAdminData,isAdmin,mainUser,s
               setToggleCreateEvent(toggleCreateEvent*-1)
             }
             }} alt="" />
-          <div className={styles.container}>
-            <div className={styles.box}>
+                <h2 className={styles.formTitle}>{isUpdate ? "Update Event" : "Create New Event"}</h2>
+                
                 <label>Event Name</label>
-                <input value={oldDetails?oldDetails.title:""} onChange={(e)=>{setOldDetails({...oldDetails,title:e.target.value})}} className='eventname' type="text"></input>
+                <input 
+                  value={oldDetails?oldDetails.title:""} 
+                  onChange={(e)=>{setOldDetails({...oldDetails,title:e.target.value})}} 
+                  className='eventname' 
+                  type="text"
+                  placeholder="Enter event name"
+                />
 
                 <label>Event Date</label>
-                <input value={oldDetails?oldDetails.time:""} onChange={(e)=>{setOldDetails({...oldDetails,time:e.target.value})}} className='time' type="string"></input>
+                <input 
+                  value={oldDetails?oldDetails.time:""} 
+                  onChange={(e)=>{setOldDetails({...oldDetails,time:e.target.value})}} 
+                  className='time' 
+                  type="string"
+                  placeholder="e.g., September 15, 2023 at 6:00 PM"
+                />
 
                 <label>Image URL</label>
-                <input value={oldDetails?oldDetails.image:""} onChange={(e)=>{setOldDetails({...oldDetails,image:e.target.value})}} className='image' type="text"></input>
+                <input 
+                  value={oldDetails?oldDetails.image:""} 
+                  onChange={(e)=>{setOldDetails({...oldDetails,image:e.target.value})}} 
+                  className='image' 
+                  type="text"
+                  placeholder="Enter image URL for event banner"
+                />
 
                 <label>Event Location</label>
-                <input value={oldDetails?oldDetails.location:""}  onChange={(e)=>{setOldDetails({...oldDetails,location:e.target.value})}}className='location'></input>
+                <input 
+                  value={oldDetails?oldDetails.location:""} 
+                  onChange={(e)=>{setOldDetails({...oldDetails,location:e.target.value})}}
+                  className='location'
+                  placeholder="Enter venue name or address"
+                />
 
                 <label>Event Description</label>
-                <textarea value={oldDetails?oldDetails.about:""}  onChange={(e)=>{setOldDetails({...oldDetails,about:e.target.value})}} className={`${styles.about} about`}></textarea>
+                <textarea 
+                  value={oldDetails?oldDetails.about:""} 
+                  onChange={(e)=>{setOldDetails({...oldDetails,about:e.target.value})}} 
+                  className={`${styles.about} about`}
+                  placeholder="Describe your event, including details about activities, speakers, or any special instructions..."
+                ></textarea>
 
-                <button className={styles.bp} onClick={()=>{funct();setExecutionStopper(true)
-                  }} type="submit">{isUpdate?`Update Event`:"Create Event"}</button>
+                <button 
+                  className={styles.bp} 
+                  onClick={()=>{funct();setExecutionStopper(true)}} 
+                  type="submit"
+                >
+                  {isUpdate ? "Update Event" : "Create Event"}
+                </button>
             </div>
         </div>
         </div>

@@ -44,4 +44,5 @@
     left:50%;
     transform: translate(-50%, 0); background: transparent;
     cursor: pointer;
+    z-index: 1;
 }
