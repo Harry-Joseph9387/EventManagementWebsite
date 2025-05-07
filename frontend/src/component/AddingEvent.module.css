@@ -199,19 +199,30 @@
 
 @media (max-width: 768px) {
     .box {
-        width: 85%;
+        width: 70%;
         max-width: 450px;
         padding: 28px 20px;
+    }
+    .box input, .about {
+        font-size: 13px;
+        padding: 10px 14px;
     }
     
     .formTitle {
         font-size: 22px;
     }
+    .bp {
+        /* width: 150px; */
+        /* height: 42px; */
+        font-size: 13px;
+        padding: 10px;
+    }
+    
 }
 
 @media (max-width: 576px) {
     .box {
-        width: 90%;
+        width: 75%;
         max-width: 400px;
         padding: 24px 16px;
     }
@@ -221,7 +232,7 @@
     }
     
     .box input, .about {
-        font-size: 14px;
+        font-size: 12px;
         padding: 10px 14px;
     }
     
@@ -231,15 +242,16 @@
     }
     
     .bp {
-        width: 150px;
-        height: 42px;
+        /* width: 150px; */
+        /* height: 42px; */
         font-size: 13px;
+        padding: 10px;
     }
 }
 
 @media (max-width: 400px) {
     .box {
-        width: 95%;
+        width: 80%;
         padding: 20px 12px;
     }
     
@@ -253,13 +265,16 @@
         height: 1px;
     }
     
-    .box input {
+     .box input {
         height: 20px;
+        font-size: 12px;
+        padding: 8px 12px;
+        width: 89%;
     }
     
-    .box input, .about {
-        padding: 8px 12px;
+     .about {
         font-size: 13px;
+        width: 87%;
     }
     
     .about {

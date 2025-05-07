@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import styles from './Signup.module.css'; // Assuming you are using a CSS module
 
 const Signup = () => {
@@ -113,6 +113,10 @@ const Signup = () => {
                     <button className={styles.btnn} onClick={signup}>
                         Submit
                     </button>
+                </div>
+                
+                <div className={styles.login}>
+                    <p>Already have an account? <Link to="/login">Sign in</Link></p>
                 </div>
             </div>
         </div>

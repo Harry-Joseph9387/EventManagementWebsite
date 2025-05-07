@@ -12,6 +12,7 @@ import usrdp from './pics/x.jpg'
 import Admin from './pages/Admin'
 import './index.css'
 import {useNavigate, useLocation} from 'react-router-dom'
+import logo from '../src/pics/Screenshot 2025-05-07 095019.png'
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
   const navigate=useNavigate()  
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
 
   // [
   //   {
@@ -196,9 +198,11 @@ useEffect(()=>{
   return (
     <div className='main'>
         <div className="not-sidebar">
-          <Navbar loggedIn={loggedIn} usr={usr} setUsr={setUsr}setLoggedIn={setLoggedIn} isAdmin={isAdmin}/>
-          {!isHomePage && (
-            <button className='homebutton' onClick={() => navigate('/')}>EMW</button>
+          {!isAuthPage && (
+            <Navbar loggedIn={loggedIn} usr={usr} setUsr={setUsr} setLoggedIn={setLoggedIn} isAdmin={isAdmin}/>
+          )}
+          {!isHomePage  && (
+            <img src={logo} className='homebutton' onClick={() => navigate('/')} alt="" />
           )}
 
           <div className="main-content">

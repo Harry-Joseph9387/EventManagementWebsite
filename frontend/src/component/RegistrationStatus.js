@@ -36,8 +36,9 @@ const RegistrationStatus = ({fetchEvents,fetchAdminData,isAdmin,mainUser,organiz
   //here the eventName is not literally the event's name, it is the object containing all event details of a specific event
   return (
     <div className='event-status-container'>
-        <img className='close' onClick={()=>{setEventName('')}}  src={close} alt="" />
           <div className="event-status-box">
+          <img className='close' onClick={()=>{setEventName('')}}  src={close} alt="" />
+
             <h2>Registered User</h2>
             {event&&
             <div className="event-status-inbox">

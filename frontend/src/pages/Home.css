@@ -12,7 +12,8 @@
     width: 100%;
     height: 100%;
     overflow-y:auto;
-    background-size: fill;
+    /* background-size: fill; */
+    background-size: contain;
     background-position: center;
     font-family: 'Montserrat', sans-serif;
     /* font-family: 'Inter', sans-serif; */
@@ -430,6 +431,9 @@
 }
 
 @media (max-width: 768px) {
+  .home-main{
+    background-size: cover;
+  }
     .resize {
         width: 120px;
         max-width: 30%;

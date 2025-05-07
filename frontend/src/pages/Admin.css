@@ -1,127 +1,428 @@
-.dashboard-container {
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
+
+.admin-main {
     width: 100%;
-    /* margin: 30px auto; */
-    /* padding: 20px; */
-}
-
-.dashboard-header {
+    height: 100%;
+    background-image: url('../pics/bgEffect.png');
+    background-color: rgb(51, 51, 51);
+    background-size: contain;
+    background-position: center;
+    font-family: 'Montserrat', sans-serif;
+    overflow-y: auto;
+    padding: 20px 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #34495e;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 8px;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.dashboard-container{
+.admin-main *{
+    /* text-wrap:wrap ; */
+}
+.admin-main::-webkit-scrollbar {
+    display: none;
+}
+
+.dashboard-container {
+    width: 90%;
+    max-width: 1200px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap:20px
+    gap: 30px;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .manage-section {
-    background: white;
-    padding: 20px;
-    height: 280px;
+    background: linear-gradient(to bottom, #202020, #121212);
+    padding: 30px;
+    height: auto;
+    min-height: 350px;
     width: 90%;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: sectionAppear 0.5s ease backwards;
+}
+
+.manage-section:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.manage-section:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+@keyframes sectionAppear {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .manage-section h2 {
     margin-bottom: 20px;
     font-size: 1.5rem;
-    color: #2c3e50;
+    color: #ffffff;
+    font-weight: 400;
+    position: relative;
+    display: inline-block;
+    letter-spacing: 1px;
 }
 
+.manage-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, #d4ba89, transparent);
+}
+
+/* Common styles for lists */
 .event-list, .user-list {
-    margin-top: 15px;
+    margin-top: 25px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.every-row-container{
-    max-height: 130px;
+.every-row-container {
+    max-height: 230px;
     overflow-y: auto;
+    border-radius: 0 0 8px 8px;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.2);
 }
 
-.every-row-container::-webkit-scrollbar{
-    display: none;
+.every-row-container::-webkit-scrollbar {
+    width: 6px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
 }
 
-.event-row, .user-row {
+.every-row-container::-webkit-scrollbar-thumb {
+    background-color: rgba(212, 186, 137, 0.3);
+    border-radius: 3px;
+}
+
+/* Event Grid Styles */
+.event-row {
     display: grid;
     grid-template-columns: 2fr 2fr 1fr 1fr;
     align-items: center;
-    padding: 10px;
-    background: wheat;
-    border: 1px solid white;
-    border-radius: 8px;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+    animation: rowAppear 0.5s ease backwards;
 }
 
-.event-header, .user-header {
-    font-weight: bold;
-    background: #34495e;
-    color: white;
+.event-row.event-header {
+    background: rgba(212, 186, 137, 0.1);
+    padding: 15px;
+    border-bottom: 1px solid rgba(212, 186, 137, 0.3);
 }
 
-.event-actions, .user-actions {
+.event-name, .event-date {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.event-name {
+    font-weight: 500;
+}
+
+.event-header .event-name,
+.event-header .event-date,
+.event-header .event-registrations,
+.event-header .event-actions {
+    color: #d4ba89;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.event-header .event-registrations,
+.event-header .event-actions {
+    text-align: center;
+}
+
+.event-actions {
     display: flex;
     gap: 10px;
+    justify-content: center;
 }
 
+.event-registrations {
+    text-align: center;
+}
+
+/* User Grid Styles */
+.user-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.7fr;
+    align-items: center;
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+    animation: rowAppear 0.5s ease backwards;
+}
+
+.user-row.user-header {
+    background: rgba(212, 186, 137, 0.1);
+    padding: 15px;
+    border-bottom: 1px solid rgba(212, 186, 137, 0.3);
+}
+
+.user-name, .user-email {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 14px;
+    padding: 0 10px;
+}
+
+.user-name {
+    font-weight: 500;
+}
+
+.user-header .user-name,
+.user-header .user-email,
+.user-header .user-actions {
+    color: #d4ba89;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.user-header .user-actions {
+    text-align: center;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+/* Hover effects for rows */
+.event-row:hover, .user-row:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(3px);
+}
+
+.event-row.event-header:hover, 
+.user-row.user-header:hover {
+    transform: none;
+    background: rgba(212, 186, 137, 0.1);
+}
+
+@keyframes rowAppear {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Button Styles */
 .edit-btn {
-    background: rgb(16, 108, 16);
+    background: rgba(0, 123, 255, 0.7);
     color: white;
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    min-width: 80px;
 }
 
-.edit-btn:hover{
-
-    background:rgb(5, 232, 5);
+.edit-btn:hover {
+    background: rgba(0, 123, 255, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .delete-btn {
-    background:rgb(187, 0, 0);
+    background: rgba(220, 53, 69, 0.7);
     color: white;
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    min-width: 80px;
 }
 
-.delete-btn:hover{
-
-    background: red;
+.delete-btn:hover {
+    background: rgba(220, 53, 69, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .add-event-btn {
     margin-top: 20px;
-    background:rgb(0, 108, 144);
-    color: white;
-    padding: 12px 20px;
+    background-color: #d4ba89;
+    color: #333;
+    padding: 12px 25px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    text-align: center;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .add-event-btn:hover {
-    background:rgb(0, 183, 255);
+    background-color: #c0a575;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 186, 137, 0.3);
 }
 
-.admin-addingevent-container{
-    position: absolute;
+.admin-addingevent-container {
+    position: fixed;
     left: 0;
-    top:0;
+    top: 0;
     z-index: 20;
     width: 100%;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: containerFadeIn 0.4s ease forwards;
+}
+
+@keyframes containerFadeIn {
+    from {
+        backdrop-filter: blur(0px);
+        background-color: rgba(0, 0, 0, 0);
+    }
+    to {
+        backdrop-filter: blur(5px);
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+}
+
+/* Media Queries */
+@media (max-width: 992px) {
+    .dashboard-container {
+        width: 95%;
+    }
+    
+    .manage-section {
+        width: 95%;
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .manage-section {
+        padding: 20px;
+    }
+    .admin-main{
+        background-size: cover;
+    }
+    .event-row {
+        grid-template-columns: 2fr 1.5fr 1fr 1fr;
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    .user-row {
+        grid-template-columns: 1fr 1fr 0.7fr;
+        padding: 10px;
+        font-size: 13px;
+    }
+    
+    .manage-section h2 {
+        font-size: 1.3rem;
+    }
+    
+    .edit-btn, .delete-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .add-event-btn {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-container {
+        width: 100%;
+    }
+    
+    .manage-section {
+        width: 90%;
+        padding: 15px;
+        min-height: 300px;
+    }
+    
+    .event-row {
+        grid-template-columns: 1.5fr 1fr 0.8fr 0.8fr;
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    .user-row {
+        grid-template-columns: 1fr 1fr 0.7fr;
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    .event-name, .event-date, .user-name, .user-email {
+        font-size: 10px;
+    }
+    
+    .edit-btn, .delete-btn {
+        padding: 5px 8px;
+        font-size: 10px;
+        min-width: 30px;
+    }
+    
+    .add-event-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+    
+    .manage-section h2 {
+        font-size: 1.2rem;
+    }
+    .user-name, .user-email, .user-actions{
+        min-width: 50px;
+        /* height:50px ; */
+        overflow-wrap: break-word;
+    }
 }

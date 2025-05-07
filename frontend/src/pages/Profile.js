@@ -14,6 +14,13 @@ const Profile = ({usr,setUsr,addevent,fetchEvents}) => {
     const [isUpdate,setIsUpdate] = useState(true)
     const [loading, setLoading] = useState(true)
 
+    const handleZIndexChange = (value) => {
+        const homeButton = document.querySelector('.homebutton');
+        if (homeButton) {
+            homeButton.style.zIndex = value;
+        }
+    };
+
     const handleEdit = () => {
       const newName = prompt("Enter new name:", userDetails.username);
       const newEmail = prompt("Enter new email:", userDetails.email);
@@ -187,7 +194,10 @@ const Profile = ({usr,setUsr,addevent,fetchEvents}) => {
                     <div 
                       className="profile-each-event" 
                       key={index}
-                      onClick={() => setEventName(event)}
+                      onClick={() => {
+                        setEventName(event);
+                        handleZIndexChange('-1');
+                      }}
                     >
                       <img className='profile-each-event-image' src={event.image} alt={event.title} />
                       <div className="overlay"></div>
@@ -212,7 +222,10 @@ const Profile = ({usr,setUsr,addevent,fetchEvents}) => {
             {eventName && (
               <div className='event-status-container'>
                 <div className="event-status-box">
-                <img className='close' onClick={() => setEventName('')} src={close} alt="Close" />
+                <img className='close' onClick={() => {
+                    setEventName('');
+                    handleZIndexChange('1');
+                }} src={close} alt="Close" />
 
                   <h2>Registered Users</h2>
                   {eventName && (

@@ -32,15 +32,15 @@
 }
  .homebutton{
     color:black;
-    width:80px;
-    height:30px;
+    width:275px;
+    height:150px;
     border-radius: 10px;
     font-size: 30px;
     color: white;
     border: none;
     letter-spacing: 30px;
     position:absolute;
-    top:35px;
+    top:-15px;
     left:50%;
     transform: translate(-50%, 0); background: transparent;
     cursor: pointer;

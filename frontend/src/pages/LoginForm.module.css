@@ -1,37 +1,98 @@
-.loginmain{
-    background-color: tan;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+
+.loginmain {
     width: 100%;
-    height:100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
-    background: url('../pics/bg.jpg')
+    background-image: url('../pics/bgEffect.png');
+    background-color: rgb(51, 51, 51);
+    background-size: contain;
+    background-position: center;
+    font-family: 'Montserrat', sans-serif;
+    overflow-y: auto;
 }
-.box {
-    width: 420px;
-    color: white;
-    border-radius: 30px;
-    padding: 60px 40px 60px 40px;
-    background: transparent;
-    backdrop-filter: blur(20px);
-    border: 2px solid rgba(141, 174, 180, 0.301);
-    box-shadow: 3px 3px 7px;
 
+.loginmain::-webkit-scrollbar {
+    display: none;
+}
+
+.box {
+    width: 50%;
+    max-width: 450px;
+    color: white;
+    border-radius: 16px;
+    padding: 60px 40px;
+    background: linear-gradient(to bottom, #202020, #121212);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: cardAppear 0.6s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes cardAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .box h1 {
-    font-size: 36px;
+    font-size: 28px;
     text-align: center;
-    text-shadow: 1.5px 2px rgb(121, 230, 230), -3.5px -2.5px rgb(7, 20, 20);
+    margin-bottom: 30px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #ffffff;
+    position: relative;
+    animation: textAppear 0.5s ease 0.3s backwards;
+}
+
+.box h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #d4ba89, transparent);
+    transform: translateX(-50%);
+}
+
+@keyframes textAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .inputbox {
     position: relative;
     width: 100%;
     height: 50px;
-    margin: 30px 0;
-    background: transparent;
+    margin: 25px 0;
+    animation: fadeIn 0.5s ease backwards;
+}
+
+.inputbox:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.inputbox:nth-child(3) {
+    animation-delay: 0.5s;
 }
 
 .inputbox input {
@@ -39,144 +100,286 @@
     height: 100%;
     border: none;
     outline: none;
-    border-radius: 40px;
-    background: transparent;
-    border: 3.5px solid rgba(141, 174, 180, 0.301);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
     font-size: 16px;
-    padding-left: 20px;
+    /* padding:0px 20px; */
+    transition: all 0.3s ease;
+}
 
+.inputbox input:focus {
+    border-color: #d4ba89;
+    box-shadow: 0 0 8px rgba(212, 186, 137, 0.3);
 }
 
 .inputbox i {
     position: absolute;
     right: 20px;
-    margin-top: 15px;
-    font-size: 19px;
-
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #d4ba89;
 }
 
 .inputbox ::placeholder {
-    color: aliceblue;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .checkforgot {
     display: flex;
     justify-content: space-between;
-    font-size: 14.5px;
-    margin: -5px 5px 13px 10px;
+    align-items: center;
+    font-size: 14px;
+    margin: 20px 0;
+    animation: fadeIn 0.5s ease 0.6s backwards;
+}
 
+.checkforgot label {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .checkforgot label input {
-    margin-right: 5px;
-    accent-color: rgb(255, 255, 255);
+    margin-right: 8px;
+    accent-color: #d4ba89;
 }
 
 .checkforgot a {
-    color: aliceblue;
+    color: #d4ba89;
     text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .checkforgot a:hover {
     text-decoration: underline;
-    color: rgba(1, 27, 32, 0.74);
+    color: #c0a575;
 }
 
 .btnn {
     width: 100%;
-    height: 45px;
-    border-radius: 50px;
+    height: 48px;
+    border-radius: 8px;
     border: none;
     outline: none;
-    color: black;
-    font-weight: bolder;
+    background-color: #d4ba89;
+    color: #333;
+    font-weight: 500;
     font-size: 16px;
-    margin-top: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    letter-spacing: 1px;
+    animation: buttonAppear 0.5s ease 0.7s backwards;
+}
+
+@keyframes buttonAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .btnn:hover {
-    color: rgb(173, 228, 235);
-    background-color: rgba(1, 27, 32, 0.74);
+    background-color: #c0a575;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 186, 137, 0.3);
+}
+
+.btnn:active {
+    transform: translateY(0);
+}
+
+.reg {
+    margin-top: 25px;
+    text-align: center;
+    animation: fadeIn 0.5s ease 0.8s backwards;
 }
 
 .reg p {
-    font-size: 14.5px;
-    text-align: center;
-    margin-top: 25px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .reg a {
     text-decoration: none;
-    color: aliceblue;
+    color: #d4ba89;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .reg a:hover {
     text-decoration: underline;
-    color: rgba(1, 27, 32, 0.74);
+    color: #c0a575;
 }
+
 .notification {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(5px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    animation: fadeIn 0.3s ease;
+    animation: containerFadeIn 0.4s ease forwards;
+}
+
+@keyframes containerFadeIn {
+    from {
+        backdrop-filter: blur(0px);
+        background-color: rgba(0, 0, 0, 0);
+    }
+    to {
+        backdrop-filter: blur(5px);
+        background-color: rgba(0, 0, 0, 0.75);
+    }
 }
 
 .notificationContent {
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    max-width: 400px;
+    background: linear-gradient(to bottom, #202020, #121212);
+    padding: 30px;
+    border-radius: 16px;
     width: 90%;
+    max-width: 400px;
     text-align: center;
-    animation: slideIn 0.3s ease;
+    animation: boxAppear 0.5s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards;
+    opacity: 0;
+    transform: scale(0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes boxAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .notificationContent h3 {
     margin-top: 0;
-    color: #333;
-    font-size: 1.5rem;
-    margin-bottom: 15px;
+    color: #d4ba89;
+    font-size: 24px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
 }
 
 .notificationContent p {
-    margin: 10px 0;
-    line-height: 1.5;
-    color: #555;
+    margin: 12px 0;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-size: 15px;
+}
+
+.notificationContent strong {
+    color: #d4ba89;
+    font-weight: 500;
 }
 
 .okButton {
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    color: white;
+    background-color: #d4ba89;
+    color: #333;
     border: none;
-    padding: 10px 30px;
-    border-radius: 5px;
-    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 8px;
+    margin-top: 25px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
     transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 14px;
 }
 
 .okButton:hover {
-    background: linear-gradient(135deg, #2980b9, #3498db);
+    background-color: #c0a575;
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(212, 186, 137, 0.3);
+}
+@media (max-width: 768px) {
+    .loginmain{
+        background-size: cover;
+    }
+}
+/* Media Queries */
+@media (max-width: 576px) {
+    .box {
+        width: 70%;
+        padding: 40px 25px;
+    }
+    
+    .box h1 {
+        font-size: 24px;
+    }
+    
+    .inputbox {
+        height: 45px;
+        margin: 20px 0;
+    }
+    
+    .inputbox input {
+        font-size: 14px;
+    }
+    
+    .btnn {
+        height: 44px;
+        font-size: 15px;
+    }
+    
+    .checkforgot {
+        font-size: 12px;
+    }
+    
+    .reg p {
+        font-size: 13px;
+    }
+    
+    .notificationContent {
+        padding: 25px 20px;
+    }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideIn {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+@media (max-width: 400px) {
+    .box {
+        /* width: 90%; */
+        padding: 30px 20px;
+    }
+    
+    .box h1 {
+        font-size: 22px;
+    }
+    
+    .inputbox {
+        height: 40px;
+    }
+    
+    .inputbox input {
+        font-size: 13px;
+        /* padding-left: 15px; */
+    }
+    
+    .checkforgot {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .btnn {
+        height: 40px;
+        font-size: 14px;
+    }
 }

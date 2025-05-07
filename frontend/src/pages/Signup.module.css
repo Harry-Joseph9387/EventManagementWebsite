@@ -1,87 +1,261 @@
-.signupmain{
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&display=swap');
+
+.signupmain {
     width: 100%;
-    height:100%;
-    background-color: springgreen;
+    height: 100%;
+    background-image: url('../pics/bgEffect.png');
+    background-color: rgb(51, 51, 51);
     display: flex;
     justify-content: center;
     align-items: center;
-    /* height: 100vh; */
     flex-direction: column;
-    background: url('../pics/road.jpg') no-repeat center;
-    background-size: cover;
+    background-size: contain;
+    background-position: center;
+    font-family: 'Montserrat', sans-serif;
+    overflow-y: auto;
 }
+
+.signupmain::-webkit-scrollbar {
+    display: none;
+}
+
 .box {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     flex-direction: column;
-    height: 450px;
-    width: 400px;
-    border-radius: 30px;
-    backdrop-filter: blur(20px);
-    background: transparent;
-    box-shadow: 3px 3px 4px 3px rgba(240, 173, 29, 0.87)
+    width: 440px;
+    border-radius: 16px;
+    background: linear-gradient(to bottom, #202020, #121212);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 50px 40px;
+    animation: cardAppear 0.6s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
-.signupmain .h1 {
-    font-size: 50px;
+@keyframes cardAppear {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.box h1 {
+    font-size: 28px;
     margin-bottom: 30px;
-    font-weight: bolder;
-    color: rgba(235, 227, 227, 0.986);
-    text-shadow: 3px 3px rgb(0, 0, 0), -2px -1px rgb(0, 0, 0);
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #ffffff;
+    position: relative;
+    animation: textAppear 0.5s ease 0.3s backwards;
+}
+
+.box h1::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #d4ba89, transparent);
+    transform: translateX(-50%);
+}
+
+@keyframes textAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bb {
+    width: 100%;
+    margin: 12px 0;
+    animation: fadeIn 0.5s ease backwards;
+}
+
+.bb:nth-child(2) { animation-delay: 0.4s; }
+.bb:nth-child(3) { animation-delay: 0.5s; }
+.bb:nth-child(4) { animation-delay: 0.6s; }
+.bb:nth-child(5) { animation-delay: 0.7s; }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .bb input {
-    background-color: rgb(0, 0, 0);
-    width: 340px;
-    margin: 5px;
-    height: 45px;
-    border-radius: 40px;
-    background: transparent;
-    border: 2px solid rgba(240, 173, 29, 0.87);
+    width: 100%;
+    height: 50px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding-left: 15px;
     font-size: 16px;
-    color: aliceblue;
-
+    color: white;
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
 }
 
-
-.checkbox {
-    accent-color: rgb(255, 174, 0);
-    margin-top: 20px;
+.bb input:focus {
+    border-color: #d4ba89;
+    box-shadow: 0 0 8px rgba(212, 186, 137, 0.3);
 }
 
-label {
-    color: rgb(245, 245, 245);
-    font-size: 17px;
-}
-
-
-.checkbox input {
-    margin-right: 10px;
-    font-size: 14.5px;
+.bb input.invalid {
+    border-color: #e74c3c;
+    box-shadow: 0 0 8px rgba(231, 76, 60, 0.3);
 }
 
 .bb ::placeholder {
-    color: rgb(255, 255, 255);
-    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.checkbox {
+    width: 100%;
+    margin: 20px 0;
+    animation: fadeIn 0.5s ease 0.8s backwards;
+}
+
+.checkbox label {
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    justify-content: center;
+
+}
+
+.checkbox input {
+    margin-right: 10px;
+    accent-color: #d4ba89;
 }
 
 .btnn {
-    margin-top: 18px;
-    width: 300px;
-    height: 35px;
-    border-radius: 50px;
+    width: 100%;
+    height: 100%;
+    padding:10px 20px;
+    border-radius: 8px;
     border: none;
     outline: none;
-    font-weight: bolder;
+    background-color: #d4ba89;
+    color: #333;
+    font-weight: 500;
     font-size: 16px;
-    color: rgb(0, 0, 0);
-    background-color: rgb(255, 174, 0);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    animation: buttonAppear 0.5s ease 0.9s backwards;
+}
+
+@keyframes buttonAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .btnn:hover {
-    color: rgb(255, 174, 0);
-    background-color: rgb(0, 0, 0);
+    background-color: #c0a575;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 186, 137, 0.3);
+}
+
+.btnn:active {
+    transform: translateY(0);
+}
+
+.login {
+    margin-top: 25px;
+    text-align: center;
+    animation: fadeIn 0.5s ease 0.8s backwards;
+}
+
+.login p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.login a {
+    text-decoration: none;
+    color: #d4ba89;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.login a:hover {
+    text-decoration: underline;
+    color: #c0a575;
+}
+@media (max-width: 768px) {
+    .signupmain {
+        background-size: cover;
+    }
+    .box{
+        width: 60%;
+    }
+}
+/* Media Queries */
+@media (max-width: 576px) {
+    .box {
+        width: 70%;
+        padding: 40px 25px;
+    }
+    
+    .box h1 {
+        font-size: 24px;
+    }
+    
+    .bb input {
+        height: 45px;
+        font-size: 14px;
+    }
+    
+    .btnn {
+        height: 44px;
+        font-size: 15px;
+    }
+    
+    .checkbox label {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 400px) {
+    .box {
+        /* width: 90%; */
+        padding: 30px 20px;
+    }
+    
+    .box h1 {
+        font-size: 22px;
+    }
+    
+    .bb input {
+        height: 40px;
+        font-size: 13px;
+    }
+    
+    .btnn {
+        height: 40px;
+        font-size: 14px;
+    }
 }

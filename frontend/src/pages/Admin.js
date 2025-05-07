@@ -144,43 +144,43 @@ const Admin = ({loggedIn,addevent}) => {
   
   return (
     <div className="admin-main">
-      <div class="dashboard-container">
-        <section class="manage-section">
+      <div className="dashboard-container">
+        <section className="manage-section">
             <h2>Manage Events</h2>
            
-            <div class="event-list">
+            <div className="event-list">
                
-                <div class="event-row event-header">
-                    <div class="event-name">Event Name</div>
-                    <div class="event-date">Organizer</div>
-                    <div class="event-registrations">Registrations</div>
-                    <div class="event-actions">Actions</div>
+                <div className="event-row event-header">
+                    <div className="event-name">Event Name</div>
+                    <div className="event-date">Organizer</div>
+                    <div className="event-registrations">Registrations</div>
+                    <div className="event-actions">Actions</div>
                 </div>
 
               {adminData && 
                 <div className="every-row-container">
                   
-                  {adminData.events.map(event=>{
-                    return <div class="event-row">
-                    <div class="event-name">{event.title}</div>
-                    <div class="event-date">{event.organizer}</div>
-                    <div class="event-registrations">
-                      <button class="edit-btn" onClick={()=>{setEventName(event)}}>View</button>
+                  {adminData.events.map((event, index) => {
+                    return <div className="event-row" key={index}>
+                    <div className="event-name">{event.title}</div>
+                    <div className="event-date">{event.organizer}</div>
+                    <div className="event-registrations">
+                      <button className="edit-btn" onClick={()=>{setEventName(event)}}>View</button>
                     </div>
-                    <div class="event-actions">
-                        <button class="delete-btn" onClick={()=>{deleteEvent(event.title)}}>Delete</button>
+                    <div className="event-actions">
+                        <button className="delete-btn" onClick={()=>{deleteEvent(event.title)}}>Delete</button>
                     </div>
                 </div>
                   })}
                 </div>
               }
-              {eventName&& 
-                <RegistrationStatus  fetchAdminData={fetchAdminData} mainUser={mainUser} isAdmin={isAdmin} addevent={addevent} key={adminData.events.length} organizedEvents={adminData.events} eventName={eventName} setEventName={setEventName} removeUser={removeUser}/>
+              {eventName && 
+                <RegistrationStatus fetchAdminData={fetchAdminData} mainUser={mainUser} isAdmin={isAdmin} addevent={addevent} key={adminData ? adminData.events.length : 0} organizedEvents={adminData ? adminData.events : []} eventName={eventName} setEventName={setEventName} removeUser={removeUser}/>
               }
             </div>
 
 
-            <button class="add-event-btn" onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}}>Add New Event</button>
+            <button className="add-event-btn" onClick={()=>{setToggleCreateEvent(toggleCreateEvent*-1)}}>Add New Event</button>
              {toggleCreateEvent===1&&
               <div className="admin-addingevent-container">
                   <AddingEvent setEventName={setEventName} isAdmin={isAdmin} fetchAdminData={fetchAdminData} isUpdate={false}  setToggleCreateEvent={setToggleCreateEvent} addevent={addevent} toggleCreateEvent={toggleCreateEvent}/>
@@ -189,39 +189,31 @@ const Admin = ({loggedIn,addevent}) => {
 
         </section>
 
-        <section class="manage-section">
+        <section className="manage-section">
             <h2>Manage Users</h2>
-
           
-            <div class="user-list">
+            <div className="user-list">
                
-                <div class="user-row user-header">
-                    <div class="user-name">User Name</div>
-                    <div class="user-email">Email</div>
-                    {/* <div class="user-role">Role</div> */}
-                    <div className=""></div>
-                    <div class="user-actions">Actions</div>
+                <div className="user-row user-header">
+                    <div className="user-name">User Name</div>
+                    <div className="user-email">Email</div>
+                    <div className="user-actions">Actions</div>
                 </div>
 
                 {adminData &&
                   <div className="every-row-container">
-                    {adminData.users.map(user=>{
-                      return<div class="user-row">
-                      <div class="user-name">{user.username}</div>
-                      <div class="user-email">{user.email}</div>
-                      {/* <div class="user-role">Admin</div> */}
-                      <div className=""></div>
-                      <div class="user-actions">
-                          {/* <button class="edit-btn">Edit</button> */}
-                          <button class="delete-btn" onClick={()=>{deleteUser(user.username)}}>Delete</button>
+                    {adminData.users.map((user, index) => {
+                      return <div className="user-row" key={index}>
+                      <div className="user-name">{user.username}</div>
+                      <div className="user-email">{user.email}</div>
+                      <div className="user-actions">
+                          <button className="delete-btn" onClick={()=>{deleteUser(user.username)}}>Delete</button>
                       </div>
                   </div>
                       })}
                   </div>
                 }              
                 
-
-               
             </div>
         </section>
     </div>
