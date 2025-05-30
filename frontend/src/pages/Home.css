@@ -372,11 +372,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0);
-  backdrop-filter: blur(0px);
+  background-color: rgba(0, 0, 0, 0.64);
+  backdrop-filter: blur(7px);
   z-index: 100;
   opacity: 0;
-  transform: scale(0.95);
+  /* transform: scale(0.95); */
   transition: opacity 0.3s ease, backdrop-filter 0.4s ease, transform 0.3s ease;
   animation: fadeIn 0.4s ease forwards;
 }
